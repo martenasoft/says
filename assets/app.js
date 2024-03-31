@@ -1,3 +1,8 @@
 import './styles/app.css';
 
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+import tinymce from "tinymce";
+
+
+
+
+tinymce.init({selector: 'textarea'})

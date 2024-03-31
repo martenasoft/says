@@ -47,9 +47,6 @@ Encore
     //     config.plugins.push('@babel/a-babel-plugin');
     // })
 
-    .configureBabel((config) => {
-        config.plugins.push('@babel/plugin-transform-class-properties');
-    })
 
     // enables and configure @babel/preset-env polyfills
     .configureBabelPresetEnv((config) => {
@@ -72,6 +69,12 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
+    .copyFiles({
+        from: './node_modules/tinymce/',
+        to: './[path][name].[ext]',
+        includeSubdirectories: true,
+        pattern: /.*/
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();

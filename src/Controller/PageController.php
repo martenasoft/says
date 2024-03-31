@@ -14,7 +14,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/')]
 class PageController extends AbstractController
 {
-    #[Route('/', name: 'app_page_index', methods: ['GET'])]
+    #[Route('/', name: 'app_page_main', methods: ['GET'])]
+    public function main(PageRepository $pageRepository): Response
+    {
+        return $this->render('page/index.html.twig', [
+            'pages' => $pageRepository->findAll(),
+        ]);
+    }
+    #[Route('/admin/page', name: 'app_page_index', methods: ['GET'])]
     public function index(PageRepository $pageRepository): Response
     {
         return $this->render('page/index.html.twig', [
@@ -78,4 +85,6 @@ class PageController extends AbstractController
 
         return $this->redirectToRoute('app_page_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 }
