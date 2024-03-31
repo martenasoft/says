@@ -21,6 +21,16 @@
             <a href="#">Главная</a>
             <a href="#">О нас</a>
             <a href="#">Контакты</a>
+            <div class="user-name">
+                {% if app.user is not null %}
+                <a href="#">{{ app.user.email}}</a>
+                <a href="{{ path('app_logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}">Login</a>
+                    <a href="{{ path('app_register') }}">Registration</a>
+                {% endif %}
+            </div>
+
         </div>
 
         <!-- Вертикальное древовидное меню -->
@@ -39,8 +49,9 @@
             <div class="banner centered-block">
                 <h2>Здесь ваш баннер</h2>
             </div>
-            <h2>Контентная часть</h2>
-            <p>Здесь может быть ваш контент</p>
+
+            {% include 'elements/flush.html.twig' %}
+
             {% block body %}{% endblock %}
         </div>
 
