@@ -4,26 +4,26 @@
 
 {% block body %}
     <h1>Page index</h1>
-
+    <div class="count">
+        {{ pagination.getTotalItemCount }}
+    </div>
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>{{ knp_pagination_sortable(pagination, 'Name', 'p.name') }}</th>
                 <th>Status</th>
-                <th>Slug</th>
-                <th>actions</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-        {% for page in pages %}
+        {% for page in pagination %}
             <tr>
                 <td>{{ page.id }}</td>
                 <td>{{ page.name }}</td>
-                <td>{{ page.status }}</td>
-                <td>{{ page.slug }}</td>
+                <td class="text-center">{{ constant('App\\Entity\\Page::STATUSES')[page.status] }}</td>
                 <td>
-                    <a href="{{ path('app_page_show', {'id': page.id}) }}">show</a>
+                    <a href="{{ path('app_page_show', {'slug': page.slug}) }}">show</a>
                     <a href="{{ path('app_page_edit', {'id': page.id}) }}">edit</a>
                 </td>
             </tr>
@@ -34,6 +34,8 @@
         {% endfor %}
         </tbody>
     </table>
-
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
     <a href="{{ path('app_page_new') }}">Create new</a>
 {% endblock %}

@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[AsCommand(
-    name: 'app.user-role',
+    name: 'app:user-role',
     description: 'Change user role',
 
 )]
@@ -33,9 +33,7 @@ class UserCommand extends Command
 
     protected function configure(): void
     {
-        $this
-            ->addArgument('email', InputArgument::OPTIONAL, 'User email')
-        ;
+        $this->addArgument('email', InputArgument::OPTIONAL, 'User email');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

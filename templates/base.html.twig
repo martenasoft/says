@@ -18,9 +18,14 @@
 
         <!-- Горизонтальное меню -->
         <div class="horizontal-menu">
-            <a href="#">Главная</a>
-            <a href="#">О нас</a>
-            <a href="#">Контакты</a>
+
+            <a href="/">Home</a>
+            {{ render(controller('App\\Controller\\PageController::menu', {
+                type: constant('App\\Entity\\Page::MENU_TYPE_HORIZONTAL')
+            })) }}
+
+
+            <a href="#">Contacts</a>
             <div class="user-name">
                 {% if app.user is not null %}
                 <a href="#">{{ app.user.email}}</a>
@@ -33,12 +38,17 @@
 
         </div>
 
+
         <!-- Вертикальное древовидное меню -->
         <div class="vertical-menu">
-            <a href="#">Пункт 1</a>
-            <a href="#">Пункт 2</a>
-            <a href="#">Пункт 3</a>
-            <a href="#">Пункт 4</a>
+            {% if app.user is defined and app.user.roles is defined and constant('App\\Entity\\User::ADMIN_ROLE') in app.user.roles  %}
+            <h3>Admin menu</h3>
+            <a href="{{ path('app_page_index') }}">Page list</a>
+            {% endif %}
+            <h3> Pages</h3>
+            {{ render(controller('App\\Controller\\PageController::menu', {
+                type: constant('App\\Entity\\Page::MENU_TYPE_VERTICAL')
+            })) }}
         </div>
 
         <!-- Баннер -->
@@ -49,9 +59,12 @@
             <div class="banner centered-block">
                 <h2>Здесь ваш баннер</h2>
             </div>
-
+           <h1>{% block h1 %}{% endblock %}</h1>
             {% include 'elements/flush.html.twig' %}
 
+            {% if page is defined %}
+                {{ render(controller('App\\Controller\\PageController::breadCrumbs', {page: page})) }}
+            {% endif %}
             {% block body %}{% endblock %}
         </div>
 

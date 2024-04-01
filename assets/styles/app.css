@@ -99,13 +99,17 @@
     margin-right: 5px;
 }
 
-.form-group button {
+.form-group button, button.delete-button {
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+
+button.delete-button {
+    background-color: #721c24;
 }
 
 .form-group button:hover {
@@ -136,4 +140,49 @@
     float: right;
     margin-right: 20px;
     font-weight: bold;
+}
+
+.table {
+    margin: 10px 0 10px;
+    width: 100%;
+    border: 1px solid;
+}
+
+.table td, .table th, .table td:last-child {
+    border: 1px solid;
+    padding: 5px;
+}
+
+.table th {
+    background: #c0c0c0;
+}
+
+.table td:last-child {
+    border: 1px solid;
+    text-align: right;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+
+.action-bottom-button, .action-bottom-button form {
+    float: right;
+}
+
+.action-bottom-button button:last-child {
+    margin-left: 5px;
+}
+
+.back-to-list-bottom-button {
+    float: left;
+}
+
+.clear-fix {
+    clear: both;
 }

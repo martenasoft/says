@@ -1,0 +1,14 @@
+<div class="form-group">
+    {% if back_to_list_path is defined %}
+        <div class="back-to-list-bottom-button">
+            <a href="{{ back_to_list_path }}">Back to list</a>
+        </div>
+    {% endif %}
+    <div class="text-right action-bottom-button ">
+        {% if delete_form_file_name is defined %}
+        {{ include(delete_form_file_name) }}
+        {% endif %}
+        <button class="btn" form="page-form">{{ button_label|default('Save') }}</button>
+    </div>
+    <div class="clear-fix"></div>
+</div>

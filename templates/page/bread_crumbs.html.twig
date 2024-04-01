@@ -1,0 +1,8 @@
+{% set url = '' %}
+<a href="/">Home </a> >>
+{% for item in items %}
+    {% include 'page/_page_url.html.twig' with {item: item} %} >>
+
+{% endfor %}
+
+ {{ page.name }}

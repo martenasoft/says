@@ -1,4 +1,47 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {attr:{id:'page-form'}}) }}
+
+    <h3>Main</h3>
+    <hr>
+    <div class="form-group">
+        {{ form_row(form.name) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_row(form.slug) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.type) }}
+    </div>
+    <h3>Text</h3>
+    <hr>
+    <div>
+        {{ form_row(form.preview) }}
+    </div>
+    <div>
+        {{ form_row(form.body) }}
+    </div>
+    <h3>Image</h3>
+    <hr>
+    <div class="form-group">
+        {{ form_row(form.image) }}
+    </div>
+
+    <h3>Menu</h3>
+    <hr>
+    <div class="form-group">
+        {{ form_row(form.parent) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.menuType) }}
+    </div>
+
+
+    <h3>Public</h3>
+    <hr>
+
+    <div class="form-group">
+        {{ form_row(form.status) }}
+    </div>
+
+
 {{ form_end(form) }}

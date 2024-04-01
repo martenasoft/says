@@ -1,13 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Edit Page{% endblock %}
+{% block h1 %}Edit Page {{ page.name }} {% endblock %}
 
 {% block body %}
-    <h1>Edit Page</h1>
 
-    {{ include('page/_form.html.twig', {'button_label': 'Update'}) }}
+<div class="centered-block ">
+    {{ include('page/_form.html.twig') }}
 
-    <a href="{{ path('app_page_index') }}">back to list</a>
+    {{ include('elements/form_bottom_buttons.html.twig',{
+        'back_to_list_path':  path('app_page_index'),
+        'delete_form_file_name' : 'page/_delete_form.html.twig',
+        'button_label' : 'Update'
+    }
+    ) }}
 
-    {{ include('page/_delete_form.html.twig') }}
+</div>
 {% endblock %}

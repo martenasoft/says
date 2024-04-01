@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Page;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +22,33 @@ class PageRepository extends ServiceEntityRepository
         parent::__construct($registry, Page::class);
     }
 
-    //    /**
-    //     * @return Page[] Returns an array of Page objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function getAllQueryBuilder(string $alias = 'p'): QueryBuilder
+    {
+        return $this
+            ->createQueryBuilder($alias)
+            ;
+    }
 
-    //    public function findOneBySomeField($value): ?Page
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function breadCrumbs(Page $page): array
+    {
+        if (!$page->getParent()) {
+            return [];
+        }
+        $result = $this
+            ->createQueryBuilder('p')
+            ->andWhere("p.id=:parent")
+            ->leftJoin("p.parent", "pp")
+            ->addSelect("pp")
+            ->setParameter("parent", $page->getParent()->getId())
+            ->getQuery()
+            ->getResult()
+        ;
+
+        foreach ($result as $item) {
+            $result = array_merge($result, $this->breadCrumbs($item));
+        }
+
+        return $result ?? [];
+    }
+
 }
