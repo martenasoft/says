@@ -10,11 +10,8 @@
         {% for pageItem in pagination %}
             {{ include('page/section_item.html.twig', {page: pageItem}) }}
         {% else %}
-            <tr>
-                <td colspan="5">
-                    {{ include('elements/no_records_founds.html.twig') }}
-                </td>
-            </tr>
+
+        {{ include('elements/no_records_founds.html.twig') }}
         {% endfor %}
     </div>
     <div class="navigation">

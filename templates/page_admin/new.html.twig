@@ -1,11 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}New Page{% endblock %}
+{% block h1 %}New Page{% endblock %}
 
 {% block body %}
-    <h1>Create new Page</h1>
 
-    {{ include('page/_form.html.twig') }}
+    {{ include('page_admin/_form.html.twig') }}
 
-    <a href="{{ path('app_page_index') }}">back to list</a>
+    {{ include('elements/form_bottom_buttons.html.twig',{
+        'back_to_list_path':  path('app_page_index')
+    }
+    ) }}
 {% endblock %}

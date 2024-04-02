@@ -53,7 +53,11 @@ class PageAdminController extends AbstractController
             $page->setType(Page::PAGE_TYPE);
         }
 
-        if (empty($page->getSlug())) {
+        if (empty($page->getPosition())) {
+            $page->setPosition(9999);
+        }
+
+        if (empty($page->getSlug()) && !empty($page->getName())) {
             $page->setSlug(StringHelper::slug($page->getName()));
         }
 
@@ -61,7 +65,8 @@ class PageAdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $parent = $page->getParent()->getLevel() ?? 0;
+            $saveImageService->upload($form, $page);
+            $parent = (!empty($page) && !empty($page->getParent()) ? $page->getParent()->getLevel() : 0);
             $page->setLevel(++$parent);
             $entityManager->persist($page);
             $entityManager->flush();
@@ -94,7 +99,7 @@ class PageAdminController extends AbstractController
             $page->setType(Page::PAGE_TYPE);
         }
 
-        if (empty($page->getSlug())) {
+        if (empty($page->getSlug()) && !empty($page->getName())) {
             $page->setSlug(StringHelper::slug($page->getName()));
         }
         $form->handleRequest($request);

@@ -73,6 +73,7 @@ class Page
         self::MENU_TYPE_NONE => 'No menu',
     ];
 
+    public const MAIN_URL = 'main';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -115,7 +116,7 @@ class Page
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
@@ -126,6 +127,9 @@ class Page
 
     #[ORM\Column]
     private ?int $level = null;
+
+    #[ORM\Column]
+    private ?bool $isPreviewOnMain = null;
 
     public function __construct()
     {
@@ -373,6 +377,18 @@ class Page
     public function setLevel(int $level): static
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    public function isIsPreviewOnMain(): ?bool
+    {
+        return $this->isPreviewOnMain;
+    }
+
+    public function setIsPreviewOnMain(bool $isPreviewOnMain): static
+    {
+        $this->isPreviewOnMain = $isPreviewOnMain;
 
         return $this;
     }

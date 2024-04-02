@@ -1,0 +1,11 @@
+$primary: darken(#428bca, 20%);
+
+// the ~ allows you to reference things in node_modules
+@import "~bootstrap/scss/bootstrap";
+html, body {
+  height: 100%;
+}
+
+.main-content {
+  min-height: 75vh;
+}

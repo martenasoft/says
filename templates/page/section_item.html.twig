@@ -1,11 +1,17 @@
-<h3>{{ include ('page/_page_url.html.twig', {item: page}) }}</h3>
-<div class="float-left ">
-    {% if page.image is not empty %}
-        {{  include ('page/_page_url.html.twig', {item: page, small_image: true}) }}
-    {% endif %}
+<div class="card mb-3" >
+    <div class="row g-0">
+        <div class="col-md-4">
+            {% if page.image is not empty %}
+                {{  include ('page/_page_url.html.twig', {item: page, type: 'image'}) }}
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">  {{ include ('page/_page_url.html.twig', {item: page}) }}</h5>
+                <p class="card-text">  {{ page.preview|raw }} </p>
+                <p class="card-text"><small class="text-body-secondary"> {{ include ('page/_page_url.html.twig', {item: page, link_text: 'More ...'}) }}</small></p>
+            </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<div class="float-left">
-    {{ page.preview|raw }}
-</div>
-<div class="clear-fix"></div>

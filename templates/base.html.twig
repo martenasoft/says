@@ -1,79 +1,64 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
 
-        {% endblock %}
-    </head>
-    <body>
-
-    <div class="container">
-
-        <!-- Горизонтальное меню -->
-        <div class="horizontal-menu">
-
-            <a href="/">Home</a>
-            {{ render(controller('App\\Controller\\PageController::menu', {
-                type: constant('App\\Entity\\Page::MENU_TYPE_HORIZONTAL')
-            })) }}
+    {% endblock %}
+</head>
+<body>
 
 
-            <a href="#">Contacts</a>
-            <div class="user-name">
-                {% if app.user is not null %}
-                <a href="#">{{ app.user.email}}</a>
-                <a href="{{ path('app_logout') }}">Logout</a>
-                {% else %}
-                    <a href="{{ path('app_login') }}">Login</a>
-                    <a href="{{ path('app_register') }}">Registration</a>
-                {% endif %}
-            </div>
 
-        </div>
-
-
-        <!-- Вертикальное древовидное меню -->
-        <div class="vertical-menu">
-            {% if app.user is defined and app.user.roles is defined and constant('App\\Entity\\User::ADMIN_ROLE') in app.user.roles  %}
-            <h3>Admin menu</h3>
-            <a href="{{ path('app_page_index') }}">Page list</a>
-            {% endif %}
-            <h3> Pages</h3>
-            {{ render(controller('App\\Controller\\PageController::menu', {
-                type: constant('App\\Entity\\Page::MENU_TYPE_VERTICAL')
-            })) }}
-        </div>
-
-        <!-- Баннер -->
+<div class="container ">
+    <!-- Horizontal menu -->
+    {{ include('elements/horizontal_menu.html.twig') }}
+    <div class="row main-content">
+        <!-- Vertical menu -->
+        {{ include('elements/vertical_menu.html.twig') }}
 
 
         <!-- Контентная часть -->
-        <div class="content">
-            <div class="banner centered-block">
-                <h2>Здесь ваш баннер</h2>
+        <div class="col-lg-9">
+
+
+            <div class="container-fluid">
+
+                {% if page is defined %}
+                    {{ render(controller('App\\Controller\\PageController::breadCrumbs', {page: page})) }}
+                {% endif %}
+                <h1>{% block h1 %}{% endblock %}</h1>
+                {% include 'elements/flush.html.twig' %}
+
+                {% block body %}{% endblock %}
             </div>
-           <h1>{% block h1 %}{% endblock %}</h1>
-            {% include 'elements/flush.html.twig' %}
-
-            {% if page is defined %}
-                {{ render(controller('App\\Controller\\PageController::breadCrumbs', {page: page})) }}
-            {% endif %}
-            {% block body %}{% endblock %}
         </div>
-
-        <!-- Футер -->
-        <div class="footer">
-            <p>Здесь ваш футер</p>
-        </div>
-
     </div>
 
-    </body>
+
+    <!-- Футер -->
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+        <p class="col-md-4 mb-0 text-body-secondary">© {{ "now"|date('Y')}} Company, Inc</p>
+
+        <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Pricing</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+        </ul>
+    </footer>
+</div>
+
+</body>
 </html>

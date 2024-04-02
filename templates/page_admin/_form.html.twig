@@ -1,47 +1,72 @@
 {{ form_start(form, {attr:{id:'page-form'}}) }}
 
-    <h3>Main</h3>
-    <hr>
-    <div class="form-group">
-        {{ form_row(form.name) }}
+<div class="accordion" id="accordionPageForm">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#main" aria-expanded="true" aria-controls="main">
+                Main
+            </button>
+        </h2>
+        <div id="main" class="accordion-collapse collapse show" data-bs-parent="#accordionPageForm">
+            <div class="accordion-body">
+                {{ form_row(form.name) }}
+                {{ form_row(form.slug) }}
+                {{ form_row(form.type) }}
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#text" aria-expanded="false" aria-controls="text">
+                Text
+            </button>
+        </h2>
+        <div id="text" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">
+            <div class="accordion-body">
+                {{ form_row(form.preview) }}
+                {{ form_row(form.body) }}
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#image" aria-expanded="false" aria-controls="image">
+                Image
+            </button>
+        </h2>
+        <div id="image" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">
+            <div class="accordion-body">
+                {{ form_row(form.image) }}
+             </div>
+        </div>
     </div>
 
-    <div class="form-group">
-        {{ form_row(form.slug) }}
-    </div>
-    <div class="form-group">
-        {{ form_row(form.type) }}
-    </div>
-    <h3>Text</h3>
-    <hr>
-    <div>
-        {{ form_row(form.preview) }}
-    </div>
-    <div>
-        {{ form_row(form.body) }}
-    </div>
-    <h3>Image</h3>
-    <hr>
-    <div class="form-group">
-        {{ form_row(form.image) }}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-expanded="false" aria-controls="menu">
+                Menu
+            </button>
+        </h2>
+        <div id="menu" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">
+            <div class="accordion-body">
+                {{ form_row(form.parent) }}
+                {{ form_row(form.menuType) }}
+            </div>
+        </div>
     </div>
 
-    <h3>Menu</h3>
-    <hr>
-    <div class="form-group">
-        {{ form_row(form.parent) }}
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#public" aria-expanded="false" aria-controls="public">
+                Public
+            </button>
+        </h2>
+        <div id="public" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">
+            <div class="accordion-body">
+                {{ form_row(form.status) }}
+                {{ form_row(form.isPreviewOnMain) }}
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        {{ form_row(form.menuType) }}
-    </div>
-
-
-    <h3>Public</h3>
-    <hr>
-
-    <div class="form-group">
-        {{ form_row(form.status) }}
-    </div>
-
-
+</div>
 {{ form_end(form) }}

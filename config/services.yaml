@@ -6,6 +6,7 @@
 parameters:
     image_path: '%kernel.project_dir%/public/image'
     image_public: '/image'
+    preview_on_main_limit: 10
 services:
     # default configuration for services in *this* file
     _defaults:

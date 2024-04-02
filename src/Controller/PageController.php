@@ -7,6 +7,7 @@ use App\Entity\Page;
 use App\Repository\PageRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,7 +23,19 @@ class PageController extends AbstractController
         Request            $request
     ): Response
     {
+        $limit = $this->getParameter('preview_on_main_limit') ?? 10;
+        $items = $pageRepository
+            ->getAllQueryBuilder()
+            ->andWhere("(p.isPreviewOnMain=:isPreviewOnMain OR p.slug=:main)")
+            ->setParameter('isPreviewOnMain', true)
+            ->setParameter('main', Page::MAIN_URL)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+
         return $this->render('page/main.html.twig', [
+            'items' => $items,
             'pagination' => $this->getPagination($pageRepository, $paginator, $request)
         ]);
     }

@@ -1,0 +1,16 @@
+<div class="col-lg-3 bg-light">
+    {% if app.user is defined and app.user.roles is defined and constant('App\\Entity\\User::ADMIN_ROLE') in app.user.roles %}
+        <strong>Admin menu</strong>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_page_index') }}">Pages</a>
+            </li>
+        </ul>
+    {% endif %}
+    <strong>Pages</strong>
+    <ul class="nav flex-column">
+        {{ render(controller('App\\Controller\\PageController::menu', {
+            type: constant('App\\Entity\\Page::MENU_TYPE_VERTICAL')
+        })) }}
+    </ul>
+</div>
