@@ -34,8 +34,19 @@ class PageController extends AbstractController
             ->getResult()
         ;
 
+        $page = null;
+
+        foreach ($items as $index => $item) {
+            if ($item->getSlug() == Page::MAIN_URL) {
+                $page = $item;
+                unset($items[$index]);
+                continue;
+            }
+        }
+
         return $this->render('page/main.html.twig', [
             'items' => $items,
+            'page' => $page,
             'pagination' => $this->getPagination($pageRepository, $paginator, $request)
         ]);
     }

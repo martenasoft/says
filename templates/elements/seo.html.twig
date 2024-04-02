@@ -1,0 +1,12 @@
+<title>
+    {% block title %}
+        {{ page.seoTitle is defined and page.seoTitle ? page.seoTitle : page.name is defined ? page.name }}
+    {% endblock %}
+</title>
+<meta name="description" content="{{ page.seoDescription is defined ? page.seoDescription }}">
+<meta name="keywords" content="{{ page.seoKeywords is defined ? page.seoKeywords }}">
+<meta property="og:title" content="{{ page.ogTitle is defined and page.ogTitle is not empty ? page.seoTitle is defined and page.seoTitle is not empty ? page.ogTitle : page.name }}">
+<meta property="og:description" content="{{ page.ogDescription is defined ? page.ogDescription }}">
+<meta property="og:image" content="{{ app.request.schemeAndHttpHost }}/image/{{ constant('App\\Entity\\Page::PATH')[constant('App\\Entity\\Page::SMALL_IMAGE_TYPE')] }}/{{ page.ogImage is defined ? page.ogImage }}">
+<meta property="og:url" content="{{ app.request.schemeAndHttpHost }}{{ page.ogUrl is defined and page.ogUrl is not empty ? page.ogUrl : app.request.requestUri }}">
+<meta property="og:type" content="{{ page.ogType is defined and page.ogType is not empty ? page.ogType : constant('App\\Entity\\Interfaces\\SeoInterface::OG_TYPE_WEBSITE') }}">

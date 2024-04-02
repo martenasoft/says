@@ -5,16 +5,35 @@
 
 {% block body %}
     <div class="page-show">
-        {{ include('page/section_item.html.twig', {page: page}) }}
+        <div class="card mb-3" >
+            <div class="row g-0">
+                <div class="col-md-4">
+                    {% if page.image is not empty %}
+                        <img class="img-fluid rounded-start" src="{{ image_public }}/{{ constant('App\\Entity\\Page::PATH')[constant('App\\Entity\\Page::SMALL_IMAGE_TYPE')] }}/{{ page.image }}" alt="{{ page.name }}">
+
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">  {{ page.name }}</h5>
+                        <p class="card-text">  {{ page.preview|raw }} </p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         {% for pageItem in pagination %}
             {{ include('page/section_item.html.twig', {page: pageItem}) }}
         {% else %}
 
-        {{ include('elements/no_records_founds.html.twig') }}
+            {{ include('elements/no_records_founds.html.twig') }}
         {% endfor %}
     </div>
     <div class="navigation">
         {{ knp_pagination_render(pagination) }}
     </div>
+
+    {{ page.body|raw }}
+    </div>
+
 {% endblock %}

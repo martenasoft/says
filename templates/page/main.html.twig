@@ -5,21 +5,17 @@
 
 {% block body %}
     <div>
-    {% set page = null %}
-    {% for item in items %}
-        {% if item.slug != constant('App\\Entity\\Page::MAIN_URL') %}
+        {% for item in items %}
             {{ include('page/section_item.html.twig', {page: item}) }}
-        {% else %}
-            {% set page = item %}
-        {% endif %}
-    {% endfor %}
+        {% endfor %}
 
-{% if page.body is defined %}
-    {% if page.image is not empty %}
-        <img src="{{ image_public }}/{{ constant('App\\Entity\\Page::PATH')[constant('App\\Entity\\Page::BIG_IMAGE_TYPE')] }}/{{ page.image }}" alt="{{ page.name }}">
-        {{ page.body|raw }}
-    {% endif %}
-{% endif %}
+        {% if page.body is defined %}
+            {% if page.image is not empty %}
+                <img src="{{ image_public }}/{{ constant('App\\Entity\\Page::PATH')[constant('App\\Entity\\Page::BIG_IMAGE_TYPE')] }}/{{ page.image }}"
+                     alt="{{ page.name }}">
+                {{ page.body|raw }}
+            {% endif %}
+        {% endif %}
 
     </div>
 

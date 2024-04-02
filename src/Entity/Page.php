@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\SeoInterface;
+use App\Entity\Traits\SeoTrait;
 use App\Repository\PageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,8 +11,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PageRepository::class)]
-class Page
+class Page implements SeoInterface
 {
+    use SeoTrait;
     public const PAGE_TYPE = 1;
     public const SECTION_TYPE = 2;
     public const EXTEND_TYPE = 3;

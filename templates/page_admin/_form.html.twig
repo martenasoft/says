@@ -57,6 +57,28 @@
 
     <div class="accordion-item">
         <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#seo" aria-expanded="false" aria-controls="seo">
+                Seo
+            </button>
+        </h2>
+        <div id="seo" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">
+            <div class="accordion-body">
+                {{ form_row(form.seoTitle) }}
+                {{ form_row(form.seoDescription) }}
+                {{ form_row(form.seoKeywords) }}
+                <strong>Social networks</strong>
+                <hr>
+                {{ form_row(form.ogTitle) }}
+                {{ form_row(form.ogDescription) }}
+                {{ form_row(form.ogUrl) }}
+                {{ form_row(form.ogImage) }}
+                {{ form_row(form.ogType) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#public" aria-expanded="false" aria-controls="public">
                 Public
             </button>

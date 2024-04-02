@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Interfaces\SeoInterface;
 use App\Entity\Page;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -59,7 +60,20 @@ class PageType extends AbstractType
                     ])
                 ],
             ])
+            ->add('seoTitle')
+            ->add('seoDescription')
+            ->add('seoKeywords')
+
+            ->add('ogTitle')
+            ->add('ogDescription')
+            ->add('ogUrl')
+            ->add('ogImage')
+            ->add('ogType', ChoiceType::class, [
+                'choices' => array_flip(SeoInterface::OG_TYPES)
+            ])
+
             ->add('isPreviewOnMain')
+            ->add('seoKeywords')
 
 
         ;

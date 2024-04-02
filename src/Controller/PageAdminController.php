@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\Traits\PageTrait;
+use App\Entity\Interfaces\SeoInterface;
 use App\Entity\Page;
 use App\Form\PageType;
 use App\Helper\StringHelper;
@@ -49,17 +50,7 @@ class PageAdminController extends AbstractController
             $page->setPublicAt($dateTimeNow);
         }
 
-        if (empty($page->getType())) {
-            $page->setType(Page::PAGE_TYPE);
-        }
-
-        if (empty($page->getPosition())) {
-            $page->setPosition(9999);
-        }
-
-        if (empty($page->getSlug()) && !empty($page->getName())) {
-            $page->setSlug(StringHelper::slug($page->getName()));
-        }
+        $this->setDefaults($page);
 
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
@@ -99,11 +90,9 @@ class PageAdminController extends AbstractController
             $page->setType(Page::PAGE_TYPE);
         }
 
-        if (empty($page->getSlug()) && !empty($page->getName())) {
-            $page->setSlug(StringHelper::slug($page->getName()));
-        }
-        $form->handleRequest($request);
+        $this->setDefaults($page);
 
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $saveImageService->upload($form, $page);
@@ -134,4 +123,42 @@ class PageAdminController extends AbstractController
         return $this->redirectToRoute('app_page_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    private function setDefaults(Page $page): void
+    {
+        if (empty($page->getSeoTitle()) && !empty($page->getName())) {
+            $page->setSeoTitle($page->getName());
+        }
+
+        if (empty($page->getOgTitle()) && !empty($page->getName())) {
+            $page->setOgTitle($page->getName());
+        }
+
+        if (empty($page->getOgUrl()) && !empty($page->getSlug()) && $page->getSlug() !== Page::MAIN_URL) {
+            $page->setOgTitle($page->getSlug());
+        }
+
+        if (empty($page->getOgImage()) && !empty($page->getImage())) {
+            $page->setOgImage($page->getImage());
+        }
+
+        if (empty($page->getOgType())) {
+            $page->setOgTitle(SeoInterface::OG_TYPE_WEBSITE);
+        }
+
+        if (empty($page->getOgDescription()) && !empty($page->getSeoDescription())) {
+            $page->setOgDescription($page->getSeoDescription());
+        }
+
+        if (empty($page->getOgDescription()) && !empty($page->getSeoDescription())) {
+            $page->setOgDescription($page->getSeoDescription());
+        }
+
+        if (empty($page->getPosition())) {
+            $page->setPosition(9999);
+        }
+
+        if (empty($page->getSlug()) && !empty($page->getName())) {
+            $page->setSlug(StringHelper::slug($page->getName()));
+        }
+    }
 }
