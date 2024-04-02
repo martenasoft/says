@@ -1,0 +1,11 @@
+<h3>{{ include ('page/_page_url.html.twig', {item: page}) }}</h3>
+<div class="float-left ">
+    {% if page.image is not empty %}
+        {{  include ('page/_page_url.html.twig', {item: page, small_image: true}) }}
+    {% endif %}
+</div>
+
+<div class="float-left">
+    {{ page.preview|raw }}
+</div>
+<div class="clear-fix"></div>

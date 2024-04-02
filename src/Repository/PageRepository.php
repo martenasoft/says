@@ -26,6 +26,8 @@ class PageRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder($alias)
+            ->leftJoin("p.parent", "pp")
+            ->addSelect("pp")
             ;
     }
 

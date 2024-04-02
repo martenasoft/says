@@ -6,11 +6,11 @@
 {% block body %}
 
 <div class="centered-block ">
-    {{ include('page/_form.html.twig') }}
+    {{ include('page_admin/_form.html.twig') }}
 
     {{ include('elements/form_bottom_buttons.html.twig',{
         'back_to_list_path':  path('app_page_index'),
-        'delete_form_file_name' : 'page/_delete_form.html.twig',
+        'delete_form_file_name' : 'page_admin/_delete_form.html.twig',
         'button_label' : 'Update'
     }
     ) }}

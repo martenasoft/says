@@ -32,7 +32,7 @@ class SaveImageService
         $originPath = $path.'/'.Page::PATH[Page::ORIGIN_IMAGE_TYPE];
 
         try {
-            if (file_exists($originPath .'/'.$data->getImage())) {
+            if (!empty($data->getImage()) && file_exists($originPath .'/'.$data->getImage())) {
                 unlink($originPath .'/'.$data->getImage());
             }
             $image->move($originPath,  $newFilename);
@@ -44,7 +44,7 @@ class SaveImageService
 
                 $resizedPath = $path.'/'.Page::PATH[$key];
 
-                if (file_exists($resizedPath .'/'.$data->getImage())) {
+                if (!empty($data->getImage()) && file_exists($resizedPath .'/'.$data->getImage())) {
                     unlink($resizedPath .'/'.$data->getImage());
                 }
 

@@ -29,7 +29,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="5">{{ include('elements/no_records_founds.html.twig') }}</td>
             </tr>
         {% endfor %}
         </tbody>

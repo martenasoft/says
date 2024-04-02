@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ page.name }}{% endblock %}
+{% block h1 %}{{ page.name }}{% endblock %}
+
+{% block body %}
+    <div class="page-show">
+        {{ include('page/section_item.html.twig', {page: page}) }}
+
+        {% for pageItem in pagination %}
+            {{ include('page/section_item.html.twig', {page: pageItem}) }}
+        {% else %}
+            <tr>
+                <td colspan="5">
+                    {{ include('elements/no_records_founds.html.twig') }}
+                </td>
+            </tr>
+        {% endfor %}
+    </div>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock %}

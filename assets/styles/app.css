@@ -4,11 +4,16 @@
 }
 
 
-.centered-block, .alert {
+.centered-block, .alert, .page-show {
     text-align: left;
     padding: 20px;
     border: 1px solid #ccc; /* Пример рамки для блока */
     border-radius: 5px; /* Пример скругления углов */
+}
+
+.page-show {
+    border: 0;
+    padding: 20px 0;
 }
 
 .horizontal-menu {
@@ -171,7 +176,7 @@ button.delete-button {
 }
 
 
-.action-bottom-button, .action-bottom-button form {
+.action-bottom-button, .action-bottom-button form, .right {
     float: right;
 }
 
@@ -179,7 +184,7 @@ button.delete-button {
     margin-left: 5px;
 }
 
-.back-to-list-bottom-button {
+.back-to-list-bottom-button, .float-left {
     float: left;
 }
 

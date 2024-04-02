@@ -1,34 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Page{% endblock %}
+{% block title %}{{ page.name }}{% endblock %}
+{% block h1 %}{{ page.name }}{% endblock %}
 
 {% block body %}
-    <h1>Page</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ page.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ page.name }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ page.status }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ page.slug }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_page_index') }}">back to list</a>
-
-    <a href="{{ path('app_page_edit', {'id': page.id}) }}">edit</a>
-
-    {{ include('page/_delete_form.html.twig') }}
+    <div class="page-show">
+        {% if page.image is not empty %}
+            <img src="{{ image_public }}/{{ constant('App\\Entity\\Page::PATH')[constant('App\\Entity\\Page::BIG_IMAGE_TYPE')] }}/{{ page.image }}" alt="{{ page.name }}">
+            {{ page.body|raw }}
+        {% endif %}
+    </div>
 {% endblock %}
