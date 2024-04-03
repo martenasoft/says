@@ -33,14 +33,14 @@ class UserCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('email', InputArgument::OPTIONAL, 'User email');
+        $this->addArgument('email', InputArgument::REQUIRED, 'User email');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $email = $input->getArgument('email');
-        $roles = $io->choice('Select the queue to analyze', User::ROLES, multiSelect: true);
+        $roles = $io->choice('Select roles', User::ROLES, multiSelect: true);
 
         $user = $this->userRepository->findOneByEmail($email);
         if (empty($user)) {

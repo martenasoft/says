@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ page.id }}</td>
                 <td>{{ page.name }}</td>
-                <td class="text-center">{{ constant('App\\Entity\\Page::STATUSES')[page.status] }}</td>
+                <td class="text-center">{{ constant('App\\Entity\\Page::STATUSES')[page.status] ?? '' }}</td>
                 <td>
                     <a href="{{ path('app_page_show', {'slug': page.slug}) }}">show</a>
                     <a href="{{ path('app_page_edit', {'id': page.id}) }}">edit</a>

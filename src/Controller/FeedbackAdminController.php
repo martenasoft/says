@@ -23,11 +23,10 @@ class FeedbackAdminController extends AbstractController
     ): Response
     {
         $queryBuilder = $feedbackRepository->getAllQueryBuilder();
-
         $pagination = $paginator->paginate(
         $queryBuilder->getQuery(),
-        $request->query->getInt('page', 1)
-    );
+        $request->query->getInt('page', 1));
+
         return $this->render('feedback_admin/index.html.twig', [
             'pagination' => $pagination,
         ]);

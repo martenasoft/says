@@ -25,7 +25,7 @@ trait PageTrait
         $queryBuilder = $queryBuilder ?? $this->getItemsQueryBuilder($pageRepository);
         $user = $this->getUser();
 
-        if (!in_array(User::ADMIN_ROLE, $user->getRoles())) {
+        if (!empty($user) && !in_array(User::ADMIN_ROLE, $user->getRoles())) {
             $queryBuilder
                 ->andWhere("p.status=:status")
                 ->setParameter('status', $status)
