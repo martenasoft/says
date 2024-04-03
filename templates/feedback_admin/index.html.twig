@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feedback index{% endblock %}
+
+{% block body %}
+    <h1>Feedback index</h1>
+    <div class="count">
+        {{ pagination.getTotalItemCount }}
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>From</th>
+                <th>Subject</th>
+                <th>Created</th>
+                <th>Updated</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for feedback in pagination %}
+            <tr>
+                <td>{{ feedback.id }}</td>
+                <td>{{ feedback.fromEmail }}</td>
+                <td>{{ feedback.subject }}</td>
+                <td>{{ feedback.createdAt ? feedback.createdAt|date(date_time_format) : '' }}</td>
+                <td>{{ feedback.updatedAt ? feedback.updatedAt|date(date_time_format) : '' }}</td>
+                <td>{{ constant('App\\Entity\\Feedback::STATUSES')[feedback.status] ?? '' }}</td>
+                <td>
+                    <a href="{{ path('app_feedback_admin_show', {'id': feedback.id}) }}">show</a>
+                    <a href="{{ path('app_feedback_admin_edit', {'id': feedback.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">{{ include('elements/no_records_founds.html.twig') }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_feedback_admin_new') }}">Create new</a>
+
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock %}

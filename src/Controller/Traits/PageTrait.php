@@ -18,10 +18,11 @@ trait PageTrait
         PaginatorInterface $paginator,
         Request            $request,
         int                $status = Page::STATUS_ACTIVE,
-        ?Page $page = null
+        ?Page $page = null,
+        ?QueryBuilder $queryBuilder = null
     ): PaginationInterface
     {
-        $queryBuilder = $this->getItemsQueryBuilder($pageRepository);
+        $queryBuilder = $queryBuilder ?? $this->getItemsQueryBuilder($pageRepository);
         $user = $this->getUser();
 
         if (!in_array(User::ADMIN_ROLE, $user->getRoles())) {
@@ -49,8 +50,9 @@ trait PageTrait
     {
         return $pageRepository
             ->getAllQueryBuilder()
-            ->orderBy("p.publicAt", "DESC")
-            ->addOrderBy('p.position', "ASC");
+            ->addOrderBy('p.position', "ASC")
+            ->addOrderBy("p.publicAt", "DESC")
+            ;
 
     }
 }

@@ -1,0 +1,17 @@
+<div class="card mb-3">
+    <div class="row g-0">
+        <div class="col-md-4">
+            {% if page.image is defined and page.image is not empty %}
+                <img class="img-fluid rounded-start"
+                     src="{{ image_public }}/{{ constant('App\\Entity\\Page::PATH')[constant('App\\Entity\\Page::SMALL_IMAGE_TYPE')] }}/{{ page.image }}"
+                     alt="{{ page.name }}">
+
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <p class="card-text">  {{ page.preview is defined ? page.preview|raw }} </p>
+            </div>
+        </div>
+    </div>
+</div>

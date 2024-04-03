@@ -4,4 +4,4 @@ require('bootstrap');
 import tinymce from "tinymce";
 
 
-tinymce.init({selector: 'textarea'});
+tinymce.init({class: 'tinymce'});

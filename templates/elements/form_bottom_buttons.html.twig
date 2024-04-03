@@ -17,7 +17,12 @@
                         {% endif %}
                     </div>
                     <div class="col-6">
-                        <button class="btn btn-primary" form="page-form">{{ button_label|default('Save') }}</button>
+                        {% if button_label is defined %}
+                        <button class="btn btn-primary" form="{{ form_id }}">{{ button_label }}</button>
+                        {% endif %}
+                        {% if edit_path is defined %}
+                            <a class="btn btn-primary" href="{{ edit_path }}">Edit</a>
+                        {% endif %}
                     </div>
                 </div>
 

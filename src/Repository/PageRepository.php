@@ -22,6 +22,24 @@ class PageRepository extends ServiceEntityRepository
         parent::__construct($registry, Page::class);
     }
 
+    public function getOneBySlugQueryBuilder(string $slug, ?int $notType = Page::CONTROLLER_ROUTE_TYPE, string $alias = 'p'): QueryBuilder
+    {
+        $queryBuilder = $this
+            ->getAllQueryBuilder($alias)
+            ->andWhere("p.slug=:slug")
+            ->setParameter("slug", $slug)
+           ;
+
+        if ($notType !== null) {
+            $queryBuilder
+                ->andWhere("p.type != :controllerRouteType")
+                ->setParameter('controllerRouteType', Page::CONTROLLER_ROUTE_TYPE)
+            ;
+        }
+
+        return $queryBuilder;
+    }
+
     public function getAllQueryBuilder(string $alias = 'p'): QueryBuilder
     {
         return $this

@@ -7,10 +7,10 @@ use App\Entity\Page;
 use App\Repository\PageRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 
 #[Route('/')]
 class PageController extends AbstractController
@@ -26,6 +26,8 @@ class PageController extends AbstractController
         $limit = $this->getParameter('preview_on_main_limit') ?? 10;
         $items = $pageRepository
             ->getAllQueryBuilder()
+            ->andWhere("p.type != :controllerRouteType")
+            ->setParameter('controllerRouteType', Page::CONTROLLER_ROUTE_TYPE)
             ->andWhere("(p.isPreviewOnMain=:isPreviewOnMain OR p.slug=:main)")
             ->setParameter('isPreviewOnMain', true)
             ->setParameter('main', Page::MAIN_URL)
@@ -52,10 +54,10 @@ class PageController extends AbstractController
     }
 
     #[Route('/page/{slug}.html', name: 'app_page_show', methods: ['GET'])]
-    public function show(Page $page): Response
+    public function show(string $slug, PageRepository $pageRepository): Response
     {
         return $this->render('page/show.html.twig', [
-            'page' => $page,
+            'page' => $pageRepository->getOneBySlugQueryBuilder($slug)->getQuery()->getOneOrNullResult(),
         ]);
     }
 
@@ -67,9 +69,14 @@ class PageController extends AbstractController
         Request            $request
     ): Response
     {
+        $queryBuilder = $this
+            ->getItemsQueryBuilder($pageRepository)
+            ->andWhere("p.type != :controllerRouteType")
+            ->setParameter('controllerRouteType', Page::CONTROLLER_ROUTE_TYPE)
+        ;
         return $this->render('page/section.html.twig', [
             'page' => $page,
-            'pagination' => $this->getPagination($pageRepository, $paginator, $request, page: $page),
+            'pagination' => $this->getPagination($pageRepository, $paginator, $request, page: $page, queryBuilder: $queryBuilder),
         ]);
     }
 
@@ -96,7 +103,4 @@ class PageController extends AbstractController
             'page' => $page
         ]);
     }
-
-
-
 }

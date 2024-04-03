@@ -4,6 +4,7 @@ twig:
         - 'bootstrap_5_layout.html.twig'
     globals:
         image_public: '%image_public%'
+        date_time_format: '%date_time_format%'
 
 when@test:
     twig:

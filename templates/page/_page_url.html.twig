@@ -5,6 +5,8 @@
 {% elseif item.type == constant('App\\Entity\\Page::EXTEND_TYPE') %}
     {% set url = item.slug %}
     {% set target = 'target="_blank"' %}
+{% elseif item.type == constant('App\\Entity\\Page::CONTROLLER_ROUTE_TYPE') %}
+    {% set url = path(item.slug) %}
 {% else %}
     {% set url = path('app_page_show', {slug: item.slug}) %}
 {% endif %}

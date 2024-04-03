@@ -74,6 +74,7 @@ class PageType extends AbstractType
 
             ->add('isPreviewOnMain')
             ->add('seoKeywords')
+            ->add('position')
 
 
         ;

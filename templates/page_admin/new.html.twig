@@ -6,9 +6,10 @@
 {% block body %}
 
     {{ include('page_admin/_form.html.twig') }}
-
+    'form_id': 'page-form',
     {{ include('elements/form_bottom_buttons.html.twig',{
-        'back_to_list_path':  path('app_page_index')
+        'back_to_list_path':  path('app_page_index'),
+        'form_id': 'page-form',
     }
     ) }}
 {% endblock %}
