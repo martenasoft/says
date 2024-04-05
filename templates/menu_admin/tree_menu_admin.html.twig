@@ -1,0 +1,18 @@
+{% set page = request.query.get('page') is not empty ? request.query.get('page') : 1 %}
+<ul class="list-group list-group-flush">
+    {% for item in pagination %}
+        <li class="list-group-item">
+            {% for i in 1..item.lvl %}&nbsp;{% endfor %}
+            <a href="{{ path('menu_admin_edit', {id: item.id, page: page}) }}">{{ item.name }}</a>
+            <a href="{{ path('menu_admin_delete', {id: item.id, page: page}) }}"
+               class="btn btn-sm btn-danger float-end ms-2"> <i class="bi bi-trash"></i></a>
+            <a href="{{ path('menu_admin_up', {id: item.id, page: page}) }}" class="btn btn-sm  btn-light float-end ms-2"><i class="bi bi-arrow-up"></i></a>
+            <a href="{{ path('menu_admin_down', {id: item.id, page: page}) }}" class="btn btn-sm  btn-light float-end ms-2"><i class="bi bi-arrow-down"></i></a>
+            <a href="{{ path('menu_admin_new_sub_menu', {id: item.id}) }}" class="btn btn-sm  btn-light float-end ms-2"><i class="bi bi-plus"></i></a>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class="navigation">
+    {{ knp_pagination_render(pagination) }}
+</div>

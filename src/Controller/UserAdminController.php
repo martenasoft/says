@@ -41,7 +41,7 @@ class UserAdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword('');
-            $user->setStatus(User::STATUS_EDIT);
+            $user->setStatus(User::STATUS_BLOCKED);
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -65,10 +65,9 @@ class UserAdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if (empty($user->getPassword())) {
-                $user->setStatus(User::STATUS_EDIT);
+                $user->setStatus(User::STATUS_BLOCKED);
                 $user->setRoles([User::USER_ROLE]);
             }
-
 
             $entityManager->flush();
 

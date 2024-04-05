@@ -3,11 +3,22 @@
 namespace App\Entity;
 
 use App\Entity\Interfaces\ChangeDataDayInterface;
+use App\Entity\Interfaces\DefaultStatusInterface;
+use App\Entity\Interfaces\IdInterface;
+use App\Entity\Interfaces\NameInterface;
+use App\Entity\Interfaces\RelatedMenuInterface;
 use App\Entity\Interfaces\SeoInterface;
+use App\Entity\Interfaces\SlugIntrface;
 use App\Entity\Interfaces\StatusInterface;
+use App\Entity\Interfaces\TypeInterface;
 use App\Entity\Traits\ChangeDataDayTrait;
+use App\Entity\Traits\IdTrait;
+use App\Entity\Traits\NameTrait;
+use App\Entity\Traits\RelatedMenuTrait;
 use App\Entity\Traits\SeoTrait;
+use App\Entity\Traits\SlugTrait;
 use App\Entity\Traits\StatusTrait;
+use App\Entity\Traits\TypeTrait;
 use App\Repository\PageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,15 +27,27 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PageRepository::class)]
 class Page implements
+    IdInterface,
     SeoInterface,
     ChangeDataDayInterface,
-    StatusInterface
+    DefaultStatusInterface,
+    StatusInterface,
+    SlugIntrface,
+    NameInterface,
+    RelatedMenuInterface,
+    TypeInterface
 {
     use
+        IdTrait,
         SeoTrait,
         ChangeDataDayTrait,
-        StatusTrait
+        StatusTrait,
+        SlugTrait,
+        NameTrait,
+        RelatedMenuTrait,
+        TypeTrait
         ;
+
     public const PAGE_TYPE = 1;
     public const SECTION_TYPE = 2;
     public const EXTEND_TYPE = 3;
@@ -86,80 +109,27 @@ class Page implements
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $slug = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $preview = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $body = null;
 
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
-    private ?self $parent = null;
-
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
-    private Collection $children;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $path = null;
-
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $menuType = null;
-
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $type = self::PAGE_TYPE;
-
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $position = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $publicAt = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
     #[ORM\Column]
-    private ?int $level = null;
-
-    #[ORM\Column]
-    private ?bool $isPreviewOnMain = null;
-
-    public function __construct()
-    {
-        $this->children = new ArrayCollection();
-    }
+    private ?bool $isPreviewOnMain = false;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
-
-        return $this;
     }
 
     public function getPreview(): ?string
@@ -182,84 +152,6 @@ class Page implements
     public function setBody(?string $body): static
     {
         $this->body = $body;
-
-        return $this;
-    }
-
-    public function getParent(): ?self
-    {
-        return $this->parent;
-    }
-
-    public function setParent(?self $parent): static
-    {
-        $this->parent = $parent;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, self>
-     */
-    public function getChildren(): Collection
-    {
-        return $this->children;
-    }
-
-    public function addChildren(self $children): static
-    {
-        if (!$this->children->contains($children)) {
-            $this->children->add($children);
-            $children->setParent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChildren(self $children): static
-    {
-        if ($this->children->removeElement($children)) {
-            // set the owning side to null (unless already changed)
-            if ($children->getParent() === $this) {
-                $children->setParent(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getPath(): ?string
-    {
-        return $this->path;
-    }
-
-    public function setPath(?string $path): static
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    public function getMenuType(): ?int
-    {
-        return $this->menuType;
-    }
-
-    public function setMenuType(int $menuType): static
-    {
-        $this->menuType = $menuType;
-
-        return $this;
-    }
-
-    public function getType(): ?int
-    {
-        return $this->type;
-    }
-
-    public function setType(int $type): static
-    {
-        $this->type = $type;
 
         return $this;
     }
@@ -324,4 +216,6 @@ class Page implements
 
         return $this;
     }
+
+
 }

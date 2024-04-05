@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Menu Admin | {{ menuItem is defined ? 'Edit menu'|trans : 'New menu'|trans }} {% endblock %}
+
+{% block h1 %} {{ menuItem is defined ? 'Edit menu'|trans : 'New menu'|trans }} {% endblock %}
+
+{% block breadcrumb %}
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">{% trans %} Home {% endtrans %} </a></li>
+            <li class="breadcrumb-item"><a
+                        href="{{ path('menu_admin_index') }}">{% trans %} Menu items {% endtrans %} </a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {{ menuItem is defined ? 'Edit menu'|trans : 'New menu'|trans }} </li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>Edit: {{ menuItem is defined ? menuItem.name }}</h5>
+                        </div>
+                        <div class="col-6">
+                            <div class="nav justify-content-end">
+                                {% if app.request.attributes.get('_route') != "menu_admin_new_sub_menu" and menuItem is defined and menuItem is not empty %}
+                                    <a href="{{ path('menu_admin_new_sub_menu', {id: menuItem.id}) }}"
+                                       class="btn btn-success ">New sub Menu</a>
+                                {% endif %}
+
+                                {%  if app.request.attributes.get('_route') == "menu_admin_new_sub_menu" %}
+                                    New sub Menu
+                                {%  endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% include 'menu_admin/_form.html.twig' %}
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            {% include 'menu_admin/tree_block.html.twig' %}
+        </div>
+    </div>
+{% endblock %}

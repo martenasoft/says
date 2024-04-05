@@ -2,9 +2,9 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Home</a></li>
-        {% for item in items %}
-            {% include 'page/_page_url.html.twig' with {type: 'breadcrumb'} %}
-        {% endfor %}
+{#        {% for item in items %}#}
+{#            {% include 'page/_page_url.html.twig' with {type: 'breadcrumb'} %}#}
+{#        {% endfor %}#}
         <li class="breadcrumb-item active" aria-current="page">{{ page.name }}</li>
     </ol>
 </nav>

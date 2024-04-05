@@ -30,7 +30,9 @@
             <div class="container-fluid">
 
                 {% if page.name is defined %}
-                    {{ render(controller('App\\Controller\\PageController::breadCrumbs', {page: page})) }}
+{#                    {{ render(controller('App\\Controller\\PageController::breadCrumbs', {page: page})) }}#}
+                {% else %}
+                    {% block breadcrumb %}{% endblock %}
                 {% endif %}
                 <h1>{% block h1 %} {{ page.name is defined ? page.name }}{% endblock %}</h1>
                 {% include 'elements/flush.html.twig' %}

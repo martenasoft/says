@@ -6,6 +6,7 @@ use App\Entity\Page;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @extends ServiceEntityRepository<Page>
@@ -40,35 +41,35 @@ class PageRepository extends ServiceEntityRepository
         return $queryBuilder;
     }
 
+    public function getOneById(int $id, string $alias = 'p'): Page
+    {
+        $page = $this
+            ->getAllQueryBuilder($alias)
+            ->andWhere("{$alias}.id=:id")
+            ->setParameter("id", $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+        ;
+
+        if (!$page) {
+            throw new NotFoundHttpException("Page [$id] not found");
+        }
+
+        return $page;
+    }
+
     public function getAllQueryBuilder(string $alias = 'p'): QueryBuilder
     {
         return $this
             ->createQueryBuilder($alias)
-            ->leftJoin("p.parent", "pp")
-            ->addSelect("pp")
+            ->leftJoin("p.menu", "pm")
+            ->addSelect("pm")
             ;
     }
 
     public function breadCrumbs(Page $page): array
     {
-        if (!$page->getParent()) {
-            return [];
-        }
-        $result = $this
-            ->createQueryBuilder('p')
-            ->andWhere("p.id=:parent")
-            ->leftJoin("p.parent", "pp")
-            ->addSelect("pp")
-            ->setParameter("parent", $page->getParent()->getId())
-            ->getQuery()
-            ->getResult()
-        ;
-
-        foreach ($result as $item) {
-            $result = array_merge($result, $this->breadCrumbs($item));
-        }
-
-        return $result ?? [];
+        return [];
     }
 
 }

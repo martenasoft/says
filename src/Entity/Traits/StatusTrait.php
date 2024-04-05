@@ -17,7 +17,7 @@ trait StatusTrait
 
     public function setStatus(?int $status): static
     {
-        $this->status = $status ?? StatusInterface::STATUS_ACTIVE;
+        $this->status = $status;
         return $this;
     }
 }

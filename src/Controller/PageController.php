@@ -80,27 +80,4 @@ class PageController extends AbstractController
         ]);
     }
 
-    public function menu(string $type, PageRepository $pageRepository): Response
-    {
-        $queryBuilder = $this
-            ->getItemsQueryBuilder($pageRepository)
-            ->andWhere("p.menuType IN (:menuType)")
-            ->setParameter('menuType', [
-                Page::MENU_TYPE_BOTH_VERTICAL_AND_HORIZONTAL,
-                $type
-            ]);
-
-        return $this->render('page/menu.html.twig', [
-            'type' => $type,
-            'items' =>  $queryBuilder->getQuery()->getResult()
-        ]);
-    }
-
-    public function breadCrumbs(Page $page, PageRepository $pageRepository): Response
-    {
-        return $this->render('page/bread_crumbs.html.twig', [
-            'items' => $pageRepository->breadCrumbs($page),
-            'page' => $page
-        ]);
-    }
 }

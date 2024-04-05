@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-6">
                         {% if button_label is defined %}
-                        <button class="btn btn-primary" form="{{ form_id }}">{{ button_label }}</button>
+                        <button class="btn btn-primary" type="submit" form="{{ form_id }}">{{ button_label }}</button>
                         {% endif %}
                         {% if edit_path is defined %}
                             <a class="btn btn-primary" href="{{ edit_path }}">Edit</a>

@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Entity\Interfaces\ChangeDataDayInterface;
+use App\Entity\Interfaces\IdInterface;
 use App\Entity\Interfaces\StatusInterface;
 use App\Entity\Traits\ChangeDataDayTrait;
+use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\StatusTrait;
 use App\Repository\FeedbackRepository;
 use Doctrine\DBAL\Types\Types;
@@ -12,9 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FeedbackRepository::class)]
 class Feedback implements
+    IdInterface,
     ChangeDataDayInterface
 {
     use
+        IdTrait,
         ChangeDataDayTrait,
         StatusTrait
         ;
@@ -29,11 +33,6 @@ class Feedback implements
         self::STATUS_DELETED => 'Deleted',
     ];
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\Column(length: 255)]
     private ?string $fromEmail = null;
 
@@ -42,11 +41,6 @@ class Feedback implements
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getFromEmail(): ?string
     {

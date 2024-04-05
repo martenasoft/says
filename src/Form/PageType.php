@@ -29,11 +29,6 @@ class PageType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'choices' => array_flip(Page::TYPES),
             ])
-            ->add('parent', EntityType::class, [
-                'class' => Page::class,
-                'choice_label' => 'name',
-                'required' => false
-            ])
             ->add('slug', TextType::class, [
                 'required' => false
             ])
@@ -45,9 +40,7 @@ class PageType extends AbstractType
                 'attr' => ['class' => 'tinymce'],
                 'required' => false
             ])
-            ->add('menuType', ChoiceType::class, [
-                'choices' => array_flip(Page::MENU_TYPES),
-            ])
+            ->add('menu', MenuSubType::class)
             ->add('image', FileType::class, [
                 'label' => "Image (".implode(' ', Page::MIME_TYPES).")",
                 'mapped' => false,
@@ -60,21 +53,39 @@ class PageType extends AbstractType
                     ])
                 ],
             ])
-            ->add('seoTitle')
-            ->add('seoDescription')
-            ->add('seoKeywords')
+            ->add('seoTitle', TextType::class, [
+                'required' => false
+            ])
+            ->add('seoDescription', TextType::class, [
+                'required' => false
+            ])
+            ->add('seoKeywords', TextType::class, [
+                'required' => false
+            ])
 
-            ->add('ogTitle')
-            ->add('ogDescription')
-            ->add('ogUrl')
-            ->add('ogImage')
+            ->add('ogTitle', TextType::class, [
+                'required' => false
+            ])
+            ->add('ogDescription', TextType::class, [
+                'required' => false
+            ])
+            ->add('ogUrl', TextType::class, [
+                'required' => false
+            ])
+            ->add('ogImage', TextType::class, [
+                'required' => false
+            ])
             ->add('ogType', ChoiceType::class, [
                 'choices' => array_flip(SeoInterface::OG_TYPES)
             ])
 
             ->add('isPreviewOnMain')
-            ->add('seoKeywords')
-            ->add('position')
+            ->add('seoKeywords', TextType::class, [
+                'required' => false
+            ])
+            ->add('position', TextType::class, [
+                'required' => false
+            ] )
 
 
         ;

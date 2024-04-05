@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\IdInterface;
 use App\Entity\Interfaces\StatusInterface;
+use App\Entity\Traits\IdTrait;
 use App\Entity\Traits\StatusTrait;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,11 +17,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements
+    IdInterface,
     UserInterface,
     PasswordAuthenticatedUserInterface,
     StatusInterface
 {
-    use StatusTrait;
+    use
+        IdTrait,
+        StatusTrait
+        ;
+    public const STATUS_ACTIVE = 1;
+    public const STATUS_BLOCKED = 2;
+    public const STATUS_DELETED = 3;
+
+    public const STATUSES = [
+        self::STATUS_ACTIVE => 'Active',
+        self::STATUS_BLOCKED => 'Blocked',
+        self::STATUS_DELETED => 'Deleted',
+    ];
     public const USER_ROLE = 'ROLE_USER';
     public const ADMIN_ROLE = 'ROLE_ADMIN';
 
@@ -27,11 +42,6 @@ class User implements
         self::USER_ROLE => self::USER_ROLE ,
         self::ADMIN_ROLE => self::ADMIN_ROLE,
     ];
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(length: 180)]
     #[Assert\NotBlank]
@@ -52,11 +62,6 @@ class User implements
 
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getEmail(): ?string
     {

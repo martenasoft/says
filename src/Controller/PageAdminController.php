@@ -4,22 +4,29 @@ namespace App\Controller;
 
 use App\Controller\Traits\PageTrait;
 use App\Entity\Interfaces\SeoInterface;
+use App\Entity\Menu;
 use App\Entity\Page;
+use App\Error\Interfaces\ErrorCodesInterface;
 use App\Form\PageType;
 use App\Helper\StringHelper;
+use App\Repository\MenuRepository;
 use App\Repository\PageRepository;
 use App\Service\SaveImageService;
+use App\Service\SaveMenuService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Monolog\DateTimeImmutable;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatableInterface;
 
 class PageAdminController extends AbstractController
 {
     use PageTrait;
+
     #[Route('/admin/page', name: 'app_page_index', methods: ['GET'])]
     public function index(
         PageRepository     $pageRepository,
@@ -36,7 +43,9 @@ class PageAdminController extends AbstractController
     public function new(
         Request                $request,
         EntityManagerInterface $entityManager,
-        SaveImageService       $saveImageService
+        SaveImageService       $saveImageService,
+        MenuRepository         $menuRepository,
+        LoggerInterface        $logger
     ): Response
     {
         $page = new Page();
@@ -50,17 +59,37 @@ class PageAdminController extends AbstractController
             $page->setPublicAt($dateTimeNow);
         }
 
-        $this->setDefaults($page);
-
         $form = $this->createForm(PageType::class, $page);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $saveImageService->upload($form, $page);
-            $parent = (!empty($page) && !empty($page->getParent()) ? $page->getParent()->getLevel() : 0);
-            $page->setLevel(++$parent);
-            $entityManager->persist($page);
-            $entityManager->flush();
+
+            $entityManager->beginTransaction();
+            try {
+                $this->setDefaults($page);
+                $menu = $this->initNewMenu($page);
+
+                if ($menu !== null) {
+                    $menuRepository->create($menu, $menu->getParent());
+                }
+
+                $page->setMenu($menu);
+                $saveImageService->upload($form, $page);
+
+                $entityManager->persist($page);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Page created successfully');
+                $entityManager->commit();
+            } catch (\Throwable $exception) {
+                $this->addFlash("error", "000501. Error create page!");
+                $logger->error($exception->getMessage(), [
+                    'line' => $exception->getLine(),
+                    'code' => $exception->getCode(),
+                    'file' => $exception->getFile()
+                ]);
+                $entityManager->rollback();
+            }
 
             return $this->redirectToRoute('app_page_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -74,11 +103,22 @@ class PageAdminController extends AbstractController
     #[Route('/admin/page/edit/{id}', name: 'app_page_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request                $request,
-        Page                   $page,
+        int                    $id,
         EntityManagerInterface $entityManager,
-        SaveImageService       $saveImageService
+        SaveImageService       $saveImageService,
+        PageRepository         $pageRepository,
+        MenuRepository         $menuRepository,
+        LoggerInterface        $logger
     ): Response
     {
+        $page = $pageRepository->getOneById($id);
+        $menu = $page->getMenu();
+        $parentMenu = $menuRepository->getOneParent($menu);
+
+        if ($menu !== null) {
+            $menu->setParent($parentMenu);
+        }
+
         $form = $this->createForm(PageType::class, $page);
         $dateTimeNow = new DateTimeImmutable('now');
 
@@ -90,13 +130,46 @@ class PageAdminController extends AbstractController
             $page->setType(Page::PAGE_TYPE);
         }
 
-        $this->setDefaults($page);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $saveImageService->upload($form, $page);
-            $entityManager->flush();
+            $entityManager->beginTransaction();
+            try {
+                // set default values
+                $this->setDefaults($page);
+
+                // get selected menu in form
+                $selectedMenu = $page->getMenu();
+                // delete menu item
+                if (!empty($menu) && empty($selectedMenu)) {
+                    $menuRepository->delete($menu);
+                }
+
+                // create menu
+                if (empty($menu) && !empty($selectedMenu)) {
+                    $newMenu = $this->initNewMenu($page);
+                    $menuRepository->create($newMenu, $selectedMenu->getParent());
+                }
+
+                // move element
+                if (!empty($menu) && !empty($selectedMenu) && $menu !== $selectedMenu) {
+                    $menuRepository->move($menu, $selectedMenu);
+                }
+
+                //upload image
+                $saveImageService->upload($form, $page);
+                $this->addFlash('success', 'Page updated successfully');
+                $entityManager->flush();
+                $entityManager->commit();
+            } catch (\Throwable $exception) {
+                $logger->error($exception->getMessage(), [
+                    'line' => $exception->getLine(),
+                    'code' => $exception->getCode(),
+                    'file' => $exception->getFile()
+                ]);
+                $this->addFlash("error", "000503. Error updated page!");
+                $entityManager->rollback();
+
+            }
 
             return $this->redirectToRoute('app_page_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -108,16 +181,41 @@ class PageAdminController extends AbstractController
     }
 
     #[Route('/admin/page/delete/{id}', name: 'app_page_delete', methods: ['POST'])]
-    public function delete(Request $request, Page $page, EntityManagerInterface $entityManager): Response
+    public function delete(
+        Request                $request,
+        Page                   $page,
+        EntityManagerInterface $entityManager,
+        MenuRepository         $menuRepository,
+        LoggerInterface        $logger
+    ): Response
     {
         if ($this->isCsrfTokenValid('delete' . $page->getId(), $request->getPayload()->get('_token'))) {
-            if ($page->getStatus() !== Page::STATUS_DELETED) {
-                $page->setStatus(Page::STATUS_DELETED);
-            } else {
-                $entityManager->remove($page);
-            }
+            $entityManager->beginTransaction();
+            try {
+                $menu = $page->getMenu();
+                if (!empty($menu)) {
+                    $menuRepository->delete($menu, $page->getStatus() !== Page::STATUS_DELETED);
+                }
 
-            $entityManager->flush();
+                if ($page->getStatus() !== Page::STATUS_DELETED) {
+                    $page->setStatus(Page::STATUS_DELETED);
+                } else {
+                    $entityManager->remove($page);
+                }
+
+                $entityManager->flush();
+                $entityManager->commit();
+                $this->addFlash('success', 'Page deleted successfully');
+
+            } catch (\Throwable $exception) {
+                $this->addFlash("error", "000504.Error delete page!");
+                $logger->error($exception->getMessage(),  [
+                    'line' => $exception->getLine(),
+                    'code' => $exception->getCode(),
+                    'file' => $exception->getFile()
+                ]);
+                $entityManager->rollback();
+            }
         }
 
         return $this->redirectToRoute('app_page_index', [], Response::HTTP_SEE_OTHER);
@@ -125,40 +223,29 @@ class PageAdminController extends AbstractController
 
     private function setDefaults(Page $page): void
     {
-        if (empty($page->getSeoTitle()) && !empty($page->getName())) {
-            $page->setSeoTitle($page->getName());
-        }
-
-        if (empty($page->getOgTitle()) && !empty($page->getName())) {
-            $page->setOgTitle($page->getName());
-        }
 
         if (empty($page->getOgUrl()) && !empty($page->getSlug()) && $page->getSlug() !== Page::MAIN_URL) {
             $page->setOgTitle($page->getSlug());
         }
 
-        if (empty($page->getOgImage()) && !empty($page->getImage())) {
-            $page->setOgImage($page->getImage());
-        }
-
-        if (empty($page->getOgType())) {
-            $page->setOgTitle(SeoInterface::OG_TYPE_WEBSITE);
-        }
-
-        if (empty($page->getOgDescription()) && !empty($page->getSeoDescription())) {
-            $page->setOgDescription($page->getSeoDescription());
-        }
-
-        if (empty($page->getOgDescription()) && !empty($page->getSeoDescription())) {
-            $page->setOgDescription($page->getSeoDescription());
-        }
-
-        if (empty($page->getPosition())) {
-            $page->setPosition(9999);
-        }
 
         if (empty($page->getSlug()) && !empty($page->getName())) {
             $page->setSlug(StringHelper::slug($page->getName()));
         }
+    }
+
+    private function initNewMenu(Page $page): ?Menu
+    {
+        $newMenu = $page->getMenu();
+        if ($newMenu === null) {
+            return null;
+        }
+
+        $newMenu
+            ->setName($page->getName())
+            ->setSlug($page->getSlug())
+            ->setCreatedAt(new \DateTimeImmutable('now'))
+            ->setStatus(Menu::STATUS_ACTIVE);
+        return $newMenu;
     }
 }
