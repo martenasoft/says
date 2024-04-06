@@ -50,13 +50,11 @@ class Page implements
 
     public const PAGE_TYPE = 1;
     public const SECTION_TYPE = 2;
-    public const EXTEND_TYPE = 3;
     public const CONTROLLER_ROUTE_TYPE = 4;
 
     public const TYPES = [
         self::PAGE_TYPE => 'Page',
         self::SECTION_TYPE => 'Section',
-        self::EXTEND_TYPE => 'Extend',
         self::CONTROLLER_ROUTE_TYPE => 'Controller route'
     ];
     public const SMALL_IMAGE_TYPE = 1;
@@ -102,7 +100,7 @@ class Page implements
         self::MENU_TYPE_NONE => 'No menu',
     ];
 
-    public const MAIN_URL = 'main';
+    public const MAIN_URL = 'app_page_main';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

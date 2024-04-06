@@ -5,10 +5,12 @@
 
 {% block body %}
     <div class="page-show">
+
     {{ include('page/section_element_without_links.html.twig') }}
 
     {% for pageItem in pagination %}
-        {{ include('page/section_item.html.twig', {page: pageItem}) }}
+
+        {{ include('page/section_item.html.twig', {item: pageItem}) }}
     {% else %}
 
         {{ include('elements/no_records_founds.html.twig') }}
@@ -19,6 +21,6 @@
     </div>
 
     {{ page.body|raw }}
-    </div>
+
 
 {% endblock %}

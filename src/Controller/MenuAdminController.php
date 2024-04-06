@@ -94,12 +94,9 @@ class MenuAdminController extends AbstractController
             try {
                 $this->setDefaults($menu);
                 $menuRepository->create($menu, $parent);
-                $path = $menuRepository->getMenuPath($menu);
-                $menu->setPath($path);
-                $this->addFlash('success', 'Menu updated successfully');
-
                 $entityManager->flush();
                 $entityManager->commit();
+                $this->addFlash('success', 'Menu updated successfully');
                 return $this->redirectToRoute('menu_admin_index');
             } catch (\Throwable $exception) {
                 $message = "001502. Error create sub menu!";
@@ -135,19 +132,15 @@ class MenuAdminController extends AbstractController
         $menu->setUpdatedAt(new \DateTimeImmutable('now'));
         $form = $this->createForm(MenuType::class, $menu);
         $form->handleRequest($request);
-        $menuOldUrl = $menu;
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             try {
                 $entityManager->beginTransaction();
-                $this->setDefaults($menu);
-                $menuRepository->updateUrlInSubElements($menu, $menuOldUrl->getSlug());
-                $path = $menuRepository->getMenuPath($menu);
-                $menu->setPath($path);
+                $this->setDefaults($menu);;
                 $entityManager->flush();
-                $this->addFlash('success', 'Menu updated successfully');
                 $entityManager->commit();
+                $this->addFlash('success', 'Menu updated successfully');
                 return $this->redirectToRoute('menu_admin_edit', ['id' => $menu->getId()]);
             } catch (\Throwable $exception) {
                 $message = "001503. Error updated menu!";
@@ -177,7 +170,7 @@ class MenuAdminController extends AbstractController
     ): Response
     {
         $pagination = $paginator->paginate(
-            $menuRepository->getAllMenuQueryBuilder()->getQuery(),
+            $menuRepository->getAllQueryBuilder()->getQuery(),
             $request->query->getInt('page', 1)
         );
 
@@ -199,14 +192,10 @@ class MenuAdminController extends AbstractController
         $oldNode = $newNode = null;
         try {
             $entityManager->beginTransaction();
-            $menuRepository->upDown($menu, true , function ($node1, $node2) use (&$oldNode, &$newNode) {
-                $oldNode = $node1;
-                $newNode = $node2;
-            });
+            $menuRepository->upDown($menu, true);
 
             $entityManager->flush();
             $entityManager->commit();
-            $this->updateMoverPath($oldNode, $newNode, $entityManager, $menuRepository);
             $this->addFlash('success', 'Menu moved up successfully');
         } catch (\Throwable $exception) {
             $this->addFlash("error", "001505. Error updated moved up!");
@@ -233,17 +222,11 @@ class MenuAdminController extends AbstractController
         LoggerInterface        $logger
     ): Response
     {
-        $oldNode = $newNode = null;
         try {
             $entityManager->beginTransaction();
-            $menuRepository->upDown($menu, false, function ($node1, $node2) use (&$oldNode, &$newNode) {
-                $oldNode = $node1;
-                $newNode = $node2;
-            });
-
+            $menuRepository->upDown($menu, false);
             $entityManager->commit();
             $this->addFlash("success", "Menu moved down successfully");
-            $this->updateMoverPath($oldNode, $newNode, $entityManager, $menuRepository);
         } catch (\Throwable $exception) {
             $this->addFlash("error", "001506. Error updated moved down!");
             $logger->error($exception->getMessage(), [
@@ -283,7 +266,7 @@ class MenuAdminController extends AbstractController
             ]);
             $entityManager->rollback();
         }
-        return $this->redirectToRoute('menu_admin_edit', [
+        return $this->redirectToRoute('menu_admin_index', [
             'id' => $menu->getId(),
             'page' => $request->request->getInt('page', 1)
         ]);
@@ -297,25 +280,5 @@ class MenuAdminController extends AbstractController
         if (empty($menu->getSlug())) {
             $menu->setSlug(StringHelper::slug($menu->getName()));
         }
-    }
-
-    private function updateMoverPath(
-        NodeInterface $oldNode,
-        NodeInterface $newNode,
-        EntityManagerInterface $entityManager,
-        MenuRepository $menuRepository
-    ): void
-    {
-
-        $entityManager->clear();
-        $oldNode = $menuRepository->findOneById($oldNode->getId());
-        $path = $menuRepository->getMenuPath($oldNode);
-        $oldNode->setPath($path);
-
-        $newNode = $menuRepository->findOneById($newNode->getId());
-        $path = $menuRepository->getMenuPath($newNode);
-        $newNode->setPath($path);
-
-        $entityManager->flush();
     }
 }

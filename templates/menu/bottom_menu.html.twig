@@ -1,19 +1,7 @@
 {% if items is not empty %}
-    <div class="row">
+    <ul class="nav col-md-4 justify-content-end">
         {% for item in items %}
-            <div class="col">
-                {% set url = '#' %}
-
-                {% if item.route is not empty %}
-                    {% set url = path(item.route, {slug: item.path}) %}
-                {% elseif item.type == constant('App\\Entity\\Menu::SITE_PAGE_TYPE') %}
-                    {% set url = app.request.getSchemeAndHttpHost ~ '/' ~ item.url %}
-                {% elseif item.type == constant('App\\Entity\\Menu::EXTERNAL_PAGE_TYPE') %}
-                    {% set url = item.url %}
-                {% endif %}
-                <a href="{{ url }}">{{ item.name }}</a>
-
-            </div>
+        <li class="nav-item">{{ include ('menu/menu_link.html.twig', {linkClass: 'nav-link px-2 text-body-secondary'}) }} </li>
         {% endfor %}
-    </div>
+    </ul>
 {% endif %}

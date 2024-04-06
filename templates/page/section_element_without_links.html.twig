@@ -1,3 +1,4 @@
+{% if page.image is defined and (page.image is not empty or page.preview is not empty ) %}
 <div class="card mb-3">
     <div class="row g-0">
         <div class="col-md-4">
@@ -15,3 +16,4 @@
         </div>
     </div>
 </div>
+{% endif %}

@@ -86,7 +86,10 @@ class NestedSetsCreateDelete extends NestedSetsBaseAbstract implements NestedSet
 
         try {
             $this->getEntityManager()->beginTransaction();
+
+            $this->getEntityManager()->getConnection()->executeQuery("SET FOREIGN_KEY_CHECKS = 0;");
             $this->getEntityManager()->getConnection()->executeQuery($sql);
+            $this->getEntityManager()->getConnection()->executeQuery("SET FOREIGN_KEY_CHECKS = 1;");
             $this->getEntityManager()->commit();
         } catch (\Throwable $exception) {
             throw $exception;

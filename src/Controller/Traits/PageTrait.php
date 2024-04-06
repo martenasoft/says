@@ -33,11 +33,6 @@ trait PageTrait
                 ->setParameter("now", (new DateTimeImmutable('now')));
         }
 
-        if ($page) {
-            $queryBuilder
-                ->andWhere("p.parent=:parent")
-                ->setParameter("parent", $page);
-        }
 
         //
         return $paginator->paginate(
@@ -48,11 +43,12 @@ trait PageTrait
 
     private function getItemsQueryBuilder(PageRepository $pageRepository): QueryBuilder
     {
-        return $pageRepository
+        $result = $pageRepository
             ->getAllQueryBuilder()
             ->addOrderBy('p.position', "ASC")
             ->addOrderBy("p.publicAt", "DESC")
             ;
 
+        return $result;
     }
 }

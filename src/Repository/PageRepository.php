@@ -23,20 +23,20 @@ class PageRepository extends ServiceEntityRepository
         parent::__construct($registry, Page::class);
     }
 
-    public function getOneBySlugQueryBuilder(string $slug, ?int $notType = Page::CONTROLLER_ROUTE_TYPE, string $alias = 'p'): QueryBuilder
+    public function getOneBySlugQueryBuilder(string $slug, bool $isRouteType = false, string $alias = 'p'): QueryBuilder
     {
-        $queryBuilder = $this
-            ->getAllQueryBuilder($alias)
-            ->andWhere("p.slug=:slug")
-            ->setParameter("slug", $slug)
-           ;
+        $queryBuilder = $this->getAllQueryBuilder($alias);
 
-        if ($notType !== null) {
-            $queryBuilder
-                ->andWhere("p.type != :controllerRouteType")
-                ->setParameter('controllerRouteType', Page::CONTROLLER_ROUTE_TYPE)
-            ;
+        if (!$isRouteType) {
+            $queryBuilder->andWhere("p.slug=:slug AND p.type != :controllerRouteType");
+        } else {
+            $queryBuilder->andWhere("p.slug=:slug AND p.type = :controllerRouteType");
         }
+
+        $queryBuilder
+            ->setParameter("slug", $slug)
+            ->setParameter('controllerRouteType', Page::CONTROLLER_ROUTE_TYPE);
+        $queryBuilder->setMaxResults(1);
 
         return $queryBuilder;
     }
@@ -62,8 +62,6 @@ class PageRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder($alias)
-            ->leftJoin("p.menu", "pm")
-            ->addSelect("pm")
             ;
     }
 

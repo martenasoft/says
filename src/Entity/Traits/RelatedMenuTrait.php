@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait RelatedMenuTrait
 {
-    #[ORM\ManyToOne(cascade: ["persist"])]
+    #[ORM\ManyToOne(cascade: ["persist", "remove"])]
     private ?Menu $menu = null;
     public function getMenu(): ?Menu
     {

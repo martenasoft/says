@@ -22,6 +22,7 @@
             <tr>
                 <th>Id</th>
                 <th>{{ knp_pagination_sortable(pagination, 'Name', 'p.name') }}</th>
+
                 <th>Status</th>
                 <th></th>
             </tr>
@@ -30,7 +31,9 @@
         {% for page in pagination %}
             <tr>
                 <td>{{ page.id }}</td>
+
                 <td>{{ page.name }}</td>
+
                 <td class="text-center">{{ constant('App\\Entity\\Page::STATUSES')[page.status] ?? '' }}</td>
                 <td class="text-end">
                     <a href="{{ path('app_page_show', {'slug': page.slug}) }}">show</a>

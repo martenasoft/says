@@ -11,7 +11,7 @@ class StringHelper
     public static function slug(string $text): string
     {
         $slugger  = new AsciiSlugger();
-        $result = $slugger->slug($text);
+        $result = $slugger->slug(strtolower($text));
         return $result;
     }
 }

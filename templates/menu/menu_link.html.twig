@@ -1,0 +1,28 @@
+{% set url = '#' %}
+
+{% if  item.menu.type == constant('App\\Entity\\Menu::EXTERNAL_PAGE_TYPE') %}
+    {% set url = item.menu.slug %}
+{% elseif item.menu.slug is not empty
+    and item.menu.type == constant('App\\Entity\\Menu::ITEM_MENU_TYPE')
+    and item.type == constant('App\\Entity\\Page::CONTROLLER_ROUTE_TYPE')
+%}
+    {% set url = path(item.menu.slug) %}
+{% elseif item.menu.type == constant('App\\Entity\\Menu::ITEM_MENU_TYPE')
+    and item.type == constant('App\\Entity\\Page::PAGE_TYPE')
+%}
+    {% set url = path('app_page_show', {slug: item.menu|menuPath})  %}
+{% elseif item.menu.type == constant('App\\Entity\\Menu::ITEM_MENU_TYPE')
+    and item.type == constant('App\\Entity\\Page::SECTION_TYPE')
+%}
+    {% set url = path('app_page_section', {slug:item.menu|menuPath}) %}
+{% endif %}
+
+{% if type is defined and type == 'image' %}
+
+<a href="{{ url }}" {{ target }} title="{{ item.name }}">
+    <img class="img-fluid rounded-start" src="{{ image_public }}/{{ constant('App\\Entity\\Page::PATH')[constant('App\\Entity\\Page::SMALL_IMAGE_TYPE')] }}/{{ item.image }}" alt="{{ item.name }}">
+</a>
+{% else %}
+    <a class="{{ linkClass is defined ? linkClass }}" href="{{ url }}">{{  link_text is defined ? link_text : item.name }}</a>
+{% endif %}
+

@@ -11,7 +11,10 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class MenuRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(
+        ManagerRegistry $registry,
+        private PageRepository $pageRepository
+    )
     {
         parent::__construct($registry, Menu::class);
     }
@@ -26,10 +29,11 @@ class MenuRepository extends ServiceEntityRepository
         (new NestedSetsCreateDelete($this->getEntityManager(), Menu::class))->delete($node, $isSafeDelete);
     }
 
-    public function getAllQueryBuilder(string $alias = 'm'): QueryBuilder
+    public function getAllQueryBuilder(?QueryBuilder $queryBuilder = null, string $alias = 'm'): QueryBuilder
     {
-        $queryBuilder = $this
-            ->createQueryBuilder($alias)
+        $queryBuilder = $queryBuilder ?? $this->createQueryBuilder($alias);
+
+        $queryBuilder
             ->orderBy("{$alias}.tree", "ASC")
             ->addOrderBy("{$alias}.lft", "ASC");
 
@@ -39,18 +43,25 @@ class MenuRepository extends ServiceEntityRepository
     public function getAllSubItemsQueryBuilder(
         NodeInterface $menu,
         ?QueryBuilder $queryBuilder = null,
+        ?int $deep = null,
         string        $alias = 'm'
     ): QueryBuilder
     {
-        $queryBuilder = $this->getAllSubItemsQueryBuilder($menu, $queryBuilder, $alias)
+        $queryBuilder = $queryBuilder ?? $this->getAllQueryBuilder(alias: $alias);
+        $queryBuilder
             ->andWhere("{$alias}.tree=:tree")->setParameter("tree", $menu->getTree())
             ->andWhere("{$alias}.lft>:lft")->setParameter("lft", $menu->getLft())
             ->andWhere("{$alias}.rgt<:rgt")->setParameter("rgt", $menu->getRgt());
 
+        if ($deep !== null) {
+            $queryBuilder
+                ->andWhere("{$alias}.lvl<=:lvl")
+                ->setParameter('lvl', $menu->getLvl()+$deep)
+            ;
+        }
+
         return $queryBuilder;
     }
-
-
 
     public function getAllRootsQueryBuilder(string $alias = 'm'): QueryBuilder
     {
@@ -78,21 +89,21 @@ class MenuRepository extends ServiceEntityRepository
             throw $exception;
         }
     }
-
-    public function findOneByNameQueryBuilder(string $name, string $alias = 'm'): QueryBuilder
-    {
-        return $this
-            ->createQueryBuilder($alias)
-            ->andWhere("{$alias}.name=:name")
-            ->setParameter("name", $name);
-    }
-
-    public function getParentByItemId(int $id): ?NodeInterface
-    {
-        $sql = "SELECT parent_id FROM `" . $this->getClassMetadata()->getTableName() . "` WHERE `id`=:id";
-        $parentId = $this->getEntityManager()->getConnection()->fetchOne($sql, ["id" => $id]);
-        return $this->find($parentId);
-    }
+//
+//    public function findOneByNameQueryBuilder(string $name, string $alias = 'm'): QueryBuilder
+//    {
+//        return $this
+//            ->createQueryBuilder($alias)
+//            ->andWhere("{$alias}.name=:name")
+//            ->setParameter("name", $name);
+//    }
+//
+//    public function getParentByItemId(int $id): ?NodeInterface
+//    {
+//        $sql = "SELECT parent_id FROM `" . $this->getClassMetadata()->getTableName() . "` WHERE `id`=:id";
+//        $parentId = $this->getEntityManager()->getConnection()->fetchOne($sql, ["id" => $id]);
+//        return $this->find($parentId);
+//    }
 
     public function getParentsByItemQueryBuilder(
         NodeInterface $menu,
@@ -133,7 +144,7 @@ class MenuRepository extends ServiceEntityRepository
     public function updateUrlInSubElements(NodeInterface $menu, string $oldUrl, string $alias = 'm'): void
     {
         $items = $this
-            ->getAllQueryBuilder($alias)
+            ->getAllQueryBuilder(alias: $alias)
             ->andWhere("{$alias}.tree=:tree")
             ->setParameter("tree", $menu->getTree())
             ->getQuery()
@@ -155,17 +166,6 @@ class MenuRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getAllMenuQueryBuilder(array $params = [], string $alias = 'm'): ?QueryBuilder
-    {
-        $queryBuilder = $this->getAllQueryBuilder($alias);
-        foreach ($params as $key => $value) {
-            $queryBuilder
-                ->andWhere("{$alias}.{$key}=:{$key}")
-                ->setParameter($key, $value);;
-        }
-
-        return $queryBuilder;
-    }
 
     public function getMenuLength(string $alias = 'm'): int
     {
@@ -200,5 +200,13 @@ class MenuRepository extends ServiceEntityRepository
         }
 
         return $result;
+    }
+
+    public function getWithPagesQueryBuilder(): QueryBuilder
+    {
+        $pageQueryBuilder = $this->pageRepository->getAllQueryBuilder();
+        $pageQueryBuilder->innerJoin("p.menu", "m")->addSelect("m");
+        $this->getAllQueryBuilder($pageQueryBuilder);
+        return $pageQueryBuilder;
     }
 }

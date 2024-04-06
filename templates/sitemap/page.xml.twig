@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% set slugs = [] %}
+    {% for item in items %}
+    {% set slugs = slugs|merge( {(item.menu.lvl) : item }) %}
+    {% if loop.first %}
+    {% set firstItem = item.menu %}
+
+    {% else %}
+        {% set slug = '' %}
+        {% for i in 1..(item.menu.lvl - firstItem.lvl) %}
+            {% if slugs[i-1] is defined and slugs[i-1].type != constant('App\\Entity\\Page::CONTROLLER_ROUTE_TYPE') %}
+                {% set slug = slug ~ '/'~ slugs[i-1].slug %}
+            {% endif %}
+        {% endfor %}
+
+        {% if item.type != constant('App\\Entity\\Page::CONTROLLER_ROUTE_TYPE') %}
+        <url>
+            <loc>{{ app.request.schemeAndHttpHost }}{{ slug ~ (item.type == constant('App\\Entity\\Page::PAGE_TYPE') ? '.html')|replace({'//':'/'}) }}</loc>
+            <lastmod>{{ item.updatedAt|date('Y-m-d') }}</lastmod>
+        </url>
+        {% endif %}
+    {% endif %}
+    {% endfor %}
+</urlset>

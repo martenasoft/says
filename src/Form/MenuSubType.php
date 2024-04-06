@@ -19,12 +19,14 @@ class MenuSubType extends AbstractType
     {
 
         $builder
-            ->add('isBottomMenu')
-            ->add('isLeftMenu')
             ->add('isTopMenu')
-            ->add('type', ChoiceType::class, [
-                'choices' => array_flip(Menu::TYPES)
-            ])->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            ->add('isLeftMenu')
+            ->add('isBottomMenu')
+
+//            ->add('type', ChoiceType::class, [
+//                'choices' => array_flip(Menu::TYPES)
+//            ])
+            ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                 $form = $event->getForm();
                 $formData = $event->getData();
                 $form->add('parent', EntityType::class, [
@@ -32,7 +34,7 @@ class MenuSubType extends AbstractType
                     'empty_data' => '',
                     'required' => false,
                     'query_builder' => function (MenuRepository $menuRepository)  use ($formData)  {
-                        $queryBuilder = $menuRepository->getAllMenuQueryBuilder();
+                        $queryBuilder = $menuRepository->getAllQueryBuilder();
 
                         if ($formData) {
                             $queryBuilder->andWhere('m.id!=:id')->setParameter('id', $formData->getId());
@@ -41,10 +43,11 @@ class MenuSubType extends AbstractType
                     },
                     'choice_label' => function(NodeInterface $data) {
                         $pad = '';
+                        dump($data);
                         for ($i = 1; $i < $data->getLvl(); $i++) {
                             $pad .= '-';
                         }
-                        return (!empty($pad) ? '|' : ''). $pad.$data->getName() .' '.$data->getId();
+                        return (!empty($pad) ? '|' : ''). $pad.$data->getName();
                     }
                 ]);
             })

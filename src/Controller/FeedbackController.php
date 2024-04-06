@@ -17,7 +17,10 @@ class FeedbackController extends AbstractController
     #[Route('/', name: 'app_feedback_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, PageRepository $pageRepository): Response
     {
-        $page = $pageRepository->getOneBySlugQueryBuilder('app_feedback_new', notType: null)->getQuery()->getOneOrNullResult();
+        $page = $pageRepository
+            ->getOneBySlugQueryBuilder('app_feedback_new', true)
+            ->getQuery()
+            ->getOneOrNullResult();
         $feedback = new Feedback();
         $user = $this->getUser();
         if (!empty($user) ) {

@@ -1,4 +1,4 @@
-{% if app.getUser and constant('App\\Entity\\Role::ROLE_ADMIN') in app.getUser.roles %}
+{% if app.getUser and constant('App\\Entity\\User::ADMIN_ROLE') in app.getUser.roles %}
 {% set adminMenuActiveRoute = app.request.attributes.get('_route') %}
 
 <div class="card mb-2">

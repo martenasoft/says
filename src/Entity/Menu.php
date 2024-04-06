@@ -49,14 +49,12 @@ class Menu implements
         TypeTrait
         ;
 
-    public const SUB_ITEM_MENU_TYPE = 1;
+    public const ITEM_MENU_TYPE = 1;
     public const EXTERNAL_PAGE_TYPE = 2;
-    public const EXISTS_ROUTE = 3;
 
     public const TYPES = [
-        self::SUB_ITEM_MENU_TYPE => 'Sub item menu',
-        self::EXTERNAL_PAGE_TYPE => 'External page',
-        self::EXISTS_ROUTE => 'Route name',
+        self::ITEM_MENU_TYPE => 'Item menu',
+        self::EXTERNAL_PAGE_TYPE => 'External page'
     ];
 
     #[ORM\Column(length: 255, nullable: true)]

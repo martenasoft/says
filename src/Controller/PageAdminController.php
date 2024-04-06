@@ -34,6 +34,12 @@ class PageAdminController extends AbstractController
         Request            $request
     ): Response
     {
+        $queryBuilder = $this
+            ->getItemsQueryBuilder($pageRepository)
+            ->leftJoin("p.menu", "m")
+            ->addSelect("m")
+        ;
+
         return $this->render('page_admin/index.html.twig', [
             'pagination' => $this->getPagination($pageRepository, $paginator, $request),
         ]);
@@ -75,7 +81,6 @@ class PageAdminController extends AbstractController
 
                 $page->setMenu($menu);
                 $saveImageService->upload($form, $page);
-
                 $entityManager->persist($page);
                 $entityManager->flush();
 
@@ -141,18 +146,27 @@ class PageAdminController extends AbstractController
                 $selectedMenu = $page->getMenu();
                 // delete menu item
                 if (!empty($menu) && empty($selectedMenu)) {
+               //     $menuRepository->updateUrlInSubElements($menu, '');
                     $menuRepository->delete($menu);
+
                 }
 
                 // create menu
                 if (empty($menu) && !empty($selectedMenu)) {
                     $newMenu = $this->initNewMenu($page);
                     $menuRepository->create($newMenu, $selectedMenu->getParent());
+                    $menu = $newMenu;
                 }
 
                 // move element
                 if (!empty($menu) && !empty($selectedMenu) && $menu !== $selectedMenu) {
                     $menuRepository->move($menu, $selectedMenu);
+                    $menuRepository->updateUrlInSubElements($menu, $selectedMenu->getSlug());
+                }
+
+                if (!empty($menu)) {
+                    $path = $menuRepository->getMenuPath($menu);
+                    $menu->setPath($path);
                 }
 
                 //upload image
@@ -194,12 +208,14 @@ class PageAdminController extends AbstractController
             try {
                 $menu = $page->getMenu();
                 if (!empty($menu)) {
+                    $page->setMenu(null);
                     $menuRepository->delete($menu, $page->getStatus() !== Page::STATUS_DELETED);
                 }
 
                 if ($page->getStatus() !== Page::STATUS_DELETED) {
                     $page->setStatus(Page::STATUS_DELETED);
                 } else {
+
                     $entityManager->remove($page);
                 }
 
@@ -245,6 +261,7 @@ class PageAdminController extends AbstractController
             ->setName($page->getName())
             ->setSlug($page->getSlug())
             ->setCreatedAt(new \DateTimeImmutable('now'))
+            ->setType(Menu::ITEM_MENU_TYPE)
             ->setStatus(Menu::STATUS_ACTIVE);
         return $newMenu;
     }
