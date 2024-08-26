@@ -146,7 +146,6 @@ class PageAdminController extends AbstractController
                 $selectedMenu = $page->getMenu();
                 // delete menu item
                 if (!empty($menu) && empty($selectedMenu)) {
-               //     $menuRepository->updateUrlInSubElements($menu, '');
                     $menuRepository->delete($menu);
 
                 }

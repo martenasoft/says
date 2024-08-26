@@ -1,19 +1,20 @@
 {% set url = '#' %}
-
-{% if  item.menu.type == constant('App\\Entity\\Menu::EXTERNAL_PAGE_TYPE') %}
+{% set target = '' %}
+{% if item.menu.type is defined and item.menu.type == constant('App\\Entity\\Menu::EXTERNAL_PAGE_TYPE') %}
     {% set url = item.menu.slug %}
-{% elseif item.menu.slug is not empty
+{% elseif item.menu.slug is defined and item.menu.slug is not empty
     and item.menu.type == constant('App\\Entity\\Menu::ITEM_MENU_TYPE')
     and item.type == constant('App\\Entity\\Page::CONTROLLER_ROUTE_TYPE')
 %}
     {% set url = path(item.menu.slug) %}
-{% elseif item.menu.type == constant('App\\Entity\\Menu::ITEM_MENU_TYPE')
+{% elseif item.menu.slug is defined and item.menu.type == constant('App\\Entity\\Menu::ITEM_MENU_TYPE')
     and item.type == constant('App\\Entity\\Page::PAGE_TYPE')
 %}
     {% set url = path('app_page_show', {slug: item.menu|menuPath})  %}
-{% elseif item.menu.type == constant('App\\Entity\\Menu::ITEM_MENU_TYPE')
+{% elseif item.menu.slug is defined and item.menu.type == constant('App\\Entity\\Menu::ITEM_MENU_TYPE')
     and item.type == constant('App\\Entity\\Page::SECTION_TYPE')
 %}
+
     {% set url = path('app_page_section', {slug:item.menu|menuPath}) %}
 {% endif %}
 

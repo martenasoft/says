@@ -125,11 +125,6 @@ class Page implements
     #[ORM\Column]
     private ?bool $isPreviewOnMain = false;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getPreview(): ?string
     {
         return $this->preview;

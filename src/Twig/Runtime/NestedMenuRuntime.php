@@ -15,7 +15,13 @@ class NestedMenuRuntime implements RuntimeExtensionInterface
 
     public function getPath($menuItem): string
     {
+
+        if (empty($menuItem)) {
+            return '';
+        }
+
         $allPages = $this->menuService->getAllItems(MenuService::ALL_MENU_CACHE_KEY);
+
         $result = [];
         $isFound = false;
         foreach ($allPages as $page) {

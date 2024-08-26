@@ -20,11 +20,16 @@ class MenuService
 
     public function getAllItems(string $cacheKey, ?callable $func = null, int $cacheExpire = 3600): array
     {
+
         $itemsQueryBuilder = $this->menuRepository->getWithPagesQueryBuilder();
-        $func($itemsQueryBuilder);
+        if ($func !== null) {
+            $func($itemsQueryBuilder);
+        }
+        return $itemsQueryBuilder->getQuery()->getResult();
 
         $result = $this->cache->get($cacheKey, function (ItemInterface $item) use($cacheExpire, $itemsQueryBuilder) {
             $item->expiresAfter($cacheExpire);
+
             return $itemsQueryBuilder->getQuery()->getResult();
         });
 
