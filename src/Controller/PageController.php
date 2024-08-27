@@ -58,8 +58,12 @@ class PageController extends AbstractController
     public function show(string $slug, PageRepository $pageRepository): Response
     {
         $slug = $this->getSlugFromPath($slug);
+        $result = $pageRepository->getOneBySlugQueryBuilder($slug)->getQuery()->getOneOrNullResult();
+        if (!$result) {
+            throw new NotFoundHttpException('Page not found');
+        }
         return $this->render('page/show.html.twig', [
-            'page' => $pageRepository->getOneBySlugQueryBuilder($slug)->getQuery()->getOneOrNullResult(),
+            'page' => $result,
         ]);
     }
 

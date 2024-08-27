@@ -43,7 +43,7 @@ class MenuSubType extends AbstractType
                     },
                     'choice_label' => function(NodeInterface $data) {
                         $pad = '';
-                        dump($data);
+
                         for ($i = 1; $i < $data->getLvl(); $i++) {
                             $pad .= '-';
                         }

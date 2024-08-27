@@ -30,10 +30,13 @@ class User implements
     public const STATUS_BLOCKED = 2;
     public const STATUS_DELETED = 3;
 
+    public const STATUS_NEW = 4;
+
     public const STATUSES = [
         self::STATUS_ACTIVE => 'Active',
         self::STATUS_BLOCKED => 'Blocked',
         self::STATUS_DELETED => 'Deleted',
+        self::STATUS_NEW => 'New',
     ];
     public const USER_ROLE = 'ROLE_USER';
     public const ADMIN_ROLE = 'ROLE_ADMIN';

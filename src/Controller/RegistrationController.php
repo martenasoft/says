@@ -41,6 +41,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setStatus(User::STATUS_NEW);
             $entityManager->persist($user);
             $entityManager->flush();
 

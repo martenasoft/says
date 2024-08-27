@@ -51,6 +51,7 @@ class UserCommand extends Command
         $user
             ->setEmail($email)
             ->setRoles($roles)
+            ->setStatus(User::STATUS_ACTIVE)
         ;
 
         $errors = $this->validator->validate($user);
