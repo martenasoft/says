@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Role;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\UserRoleService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,13 +35,17 @@ class UserAdminController extends AbstractController
     }
 
     #[Route('/admin/user/new', name: 'app_user_admin_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserRoleService $roleService
+    ): Response {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $roleService->addUserRoles($user, $user->getRoles());
             $user->setPassword('');
             $user->setStatus(User::STATUS_BLOCKED);
 
@@ -57,16 +63,19 @@ class UserAdminController extends AbstractController
 
 
     #[Route('/admin/user/edit/{id}', name: 'app_user_admin_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
-    {
+    public function edit(
+        Request $request,
+        User $user,
+        EntityManagerInterface $entityManager,
+        UserRoleService $roleService
+    ): Response {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $roleService->addUserRoles($user, $user->getRoles());
             if (empty($user->getPassword())) {
                 $user->setStatus(User::STATUS_BLOCKED);
-                $user->setRoles([User::USER_ROLE]);
             }
 
             $entityManager->flush();
@@ -78,5 +87,16 @@ class UserAdminController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+    }
+
+    public function setRoles(User $user, EntityManagerInterface $entityManager): void
+    {
+        $roles = $user->getRoles();
+        if (is_array($roles) && !empty($roles)) {
+            $roles = array_filter($roles, fn($item) => $item != User::USER_ROLE);
+            $existsRoles =
+           $user->setRoles($entityManager->getRepository(Role::class)->findAllByNames($roles));
+
+        }
     }
 }

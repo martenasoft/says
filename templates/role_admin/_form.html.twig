@@ -1,0 +1,5 @@
+{{ form_start(form, {attr:{id:'role-form'}}) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.permissions) }}
+    <a href="{{ path('app_permission_admin_new') }}">Create permission</a>
+{{ form_end(form) }}

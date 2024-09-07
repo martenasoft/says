@@ -34,11 +34,6 @@ class PageAdminController extends AbstractController
         Request            $request
     ): Response
     {
-        $queryBuilder = $this
-            ->getItemsQueryBuilder($pageRepository)
-            ->leftJoin("p.menu", "m")
-            ->addSelect("m")
-        ;
 
         return $this->render('page_admin/index.html.twig', [
             'pagination' => $this->getPagination($pageRepository, $paginator, $request),

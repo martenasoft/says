@@ -15,6 +15,7 @@
     {% else %}
         <li class="list-group-item">
             {% if item.menu.path is not empty and request.attributes.get('slug') == item.menu.path %}
+
                 <li class="list-group-item active">{{ item.menu.name }}</li>
             {% else %}
                 <span style="padding-left: {{ loop.index > 2 ? item.menu.lvl * 10 }}px;">
