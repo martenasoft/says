@@ -39,7 +39,7 @@ class RoutePermissionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (
+        if (!$user ||
             (empty($permission->getCountOfUsers()) && empty($permission->getCountOfRoles())) ||
             (!empty($route) && !$this->permissionRepository->hasUserRoute($user, $route))
         ) {

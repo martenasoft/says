@@ -9,9 +9,18 @@ parameters:
     preview_on_main_limit: 10
     date_time_format: 'd/m/y H:i'
     languages: ['en', 'ua', 'fr']
+    adminMenu: [
+          {route: 'app_page_index', title: 'Page'},
+          {route: 'menu_admin_index', title: 'Menu' },
+          {route: 'app_user_admin_index', title: 'User'},
+          {route: 'app_role_admin_index', title: 'Roles'},
+          {route: 'app_permission_admin_index', title: 'Permission'},
+          {route: 'app_feedback_admin_index', title: 'Feedback'},
+        ]
 twig:
     globals:
         languages: "%languages%"
+        adminMenu: "%adminMenu%"
 
 services:
     # default configuration for services in *this* file

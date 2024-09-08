@@ -20,16 +20,8 @@
     <div class="row main-content">
         <!-- Vertical menu -->
         <div class="col-lg-3 bg-light">
-        {{ include('menu_admin/admin_menu.html.twig', {items: [
-            {route: 'app_page_index', title: 'Page' | trans},
-            {route: 'menu_admin_index', title:'Menu' | trans},
-            {route: 'app_user_admin_index', title:'User' | trans},
-            {route: 'app_role_admin_index', title:'Roles' | trans},
-            {route: 'app_permission_admin_index', title:'Permission' | trans},
-            {route: 'app_feedback_admin_index', title:'Feedback' | trans},
-            ]
-        }) }}
-       {{ render(controller('App\\Controller\\MenuController::leftMenu')) }}
+            {{ include('menu_admin/admin_menu.html.twig') }}
+            {{ render(controller('App\\Controller\\MenuController::leftMenu')) }}
         </div>
 
         <div class="col-lg-9">
