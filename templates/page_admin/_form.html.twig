@@ -4,13 +4,14 @@
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#main" aria-expanded="true" aria-controls="main">
-                Main
+                {{ 'Main' | trans }}
             </button>
         </h2>
         <div id="main" class="accordion-collapse collapse show" data-bs-parent="#accordionPageForm">
             <div class="accordion-body">
                 {{ form_row(form.name) }}
                 {{ form_row(form.slug) }}
+                {{ form_row(form.lang) }}
                 {{ form_row(form.type) }}
             </div>
         </div>
@@ -18,7 +19,7 @@
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#text" aria-expanded="false" aria-controls="text">
-                Text
+                {{ 'Text' | trans }}
             </button>
         </h2>
         <div id="text" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">
@@ -31,7 +32,7 @@
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#image" aria-expanded="false" aria-controls="image">
-                Image
+                {{ 'Image' | trans }}
             </button>
         </h2>
         <div id="image" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">
@@ -44,13 +45,12 @@
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-expanded="false" aria-controls="menu">
-                Menu
+                {{ 'Menu' | trans }}
             </button>
         </h2>
         <div id="menu" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">
             <div class="accordion-body">
                 {{ form_row(form.menu) }}
-
             </div>
         </div>
     </div>
@@ -58,7 +58,7 @@
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#seo" aria-expanded="false" aria-controls="seo">
-                Seo
+                {{ 'Seo' | trans }}
             </button>
         </h2>
         <div id="seo" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">
@@ -66,7 +66,7 @@
                 {{ form_row(form.seoTitle) }}
                 {{ form_row(form.seoDescription) }}
                 {{ form_row(form.seoKeywords) }}
-                <strong>Social networks</strong>
+                <strong>{{ 'Social networks' | trans }}</strong>
                 <hr>
                 {{ form_row(form.ogTitle) }}
                 {{ form_row(form.ogDescription) }}
@@ -80,7 +80,7 @@
     <div class="accordion-item">
         <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#public" aria-expanded="false" aria-controls="public">
-                Public
+                {{ 'Public' | trans }}
             </button>
         </h2>
         <div id="public" class="accordion-collapse collapse" data-bs-parent="#accordionPageForm">

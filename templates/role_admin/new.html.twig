@@ -1,16 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Role{% endblock %}
+{% block title %}{{ 'New' | trans }} {{ 'Role' | trans }}{% endblock %}
+{% block h1 %}{{ 'New' | trans }} {{ 'Role' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Role</h1>
-
     {{ include('role_admin/_form.html.twig') }}
 
     {{ include('elements/form_bottom_buttons.html.twig',{
         'back_to_list_path':  path('app_role_admin_index'),
         'form_id': 'role-form',
-        'button_label': 'Create'
+        'button_label': ('Save' | trans)
     }
     ) }}
 {% endblock %}

@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin/permission')]
+#[Route('/{_locale}/admin/permission')]
 class PermissionAdminController extends AbstractController
 {
     #[Route('/', name: 'app_permission_admin_index', methods: ['GET'])]

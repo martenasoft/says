@@ -15,6 +15,9 @@ class FeedbackType extends AbstractType
         $builder
             ->add('fromEmail')
             ->add('subject')
+            ->add('lang', ChoiceType::class, [
+                'choices' => array_flip($this->parameter->get('languages'))
+            ])
             ->add('createdAt', null, [
                 'widget' => 'single_text'
             ])

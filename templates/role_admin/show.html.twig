@@ -1,18 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Role{% endblock %}
+{% block title %}{{ 'Role' | trans }}{% endblock %}
+{% block h1 %}{{ 'Role' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Role</h1>
-
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>{{ 'Id' | trans }}</th>
                 <td>{{ role.id }}</td>
             </tr>
             <tr>
-                <th>Name</th>
+                <th>{{ 'Name' | trans }}</th>
                 <td>{{ role.name }}</td>
             </tr>
         </tbody>

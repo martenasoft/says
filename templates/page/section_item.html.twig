@@ -11,7 +11,7 @@
                 <p class="card-text"> {{ item.preview|raw }} </p>
                 <p class="card-text"><small
                             class="text-body-secondary">
-                        {{ include ('menu/menu_link.html.twig', {item: item, link_text: 'More ...'}) }}
+                        {{ include ('menu/menu_link.html.twig', {item: item, link_text: ('More ...'|trans)}) }}
                     </small>
                 </p>
             </div>

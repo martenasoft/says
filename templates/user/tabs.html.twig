@@ -6,14 +6,12 @@
         <li class="nav-item">
             {% if activeRoute != itm.route %}
                 <a class="nav-link"  aria-current="page"
-                   href="{{ path(itm.route, itm.params) }}">{{ itm.title }}</a>
+                   href="{{ path(itm.route, itm.params) }}">{{ itm.title | trans }}</a>
             {% else %}
-                <p class="nav-link "><strong>{{ itm.title }}</strong></p>
+                <p class="nav-link "><strong>{{ itm.title | trans }}</strong></p>
 
             {% endif %}
-
         </li>
     {% endfor %}
-
 </ul>
 <hr>

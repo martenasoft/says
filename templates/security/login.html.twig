@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}{{ 'Log in!' | trans }}{% endblock %}
+{% block h1 %}{{ 'Log in!' | trans }}{% endblock %}
 
 {% block body %}
     <div class="container d-flex align-items-center justify-center-center">
@@ -17,13 +18,13 @@
                         </div>
                     {% endif %}
 
-                    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                    <h1 class="h3 mb-3 font-weight-normal">{{ 'Please sign in' | trans }}</h1>
                     <div class="form-group">
-                        <label for="inputEmail">Email</label>
+                        <label for="inputEmail">{{ 'Email' | trans }}</label>
                         <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
                     </div>
                     <div class="form-group">
-                        <label for="inputPassword">Password</label>
+                        <label for="inputPassword">{{ 'Password' | trans }}</label>
                         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
                     </div>
@@ -31,7 +32,7 @@
                     <div class="form-group">
                         <div class="checkbox mb-3">
                             <label>
-                                <input type="checkbox" name="_remember_me"> Remember me
+                                <input type="checkbox" name="_remember_me"> {{ 'Remember me' | trans }}
                             </label>
                         </div>
                     </div>
@@ -42,7 +43,7 @@
                     <div class="form-group">
                         <hr>
                         <button class="btn btn-lg btn-primary" type="submit">
-                            Sign in
+                            {{ 'Sign in' | trans }}
                         </button>
                     </div>
                 </form>

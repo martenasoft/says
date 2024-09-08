@@ -4,13 +4,12 @@
             <div class="col-9">
                 {% if back_to_list_path is defined %}
                     <div class="back-to-list-bottom-button">
-                        <a href="{{ back_to_list_path }}">Back to list</a>
+                        <a href="{{ back_to_list_path }}">{{ 'Back to list' | trans }}</a>
                     </div>
                 {% endif %}
             </div>
             <div class="col-3">
                 <div class="row text-right">
-
                     <div class="col-6 text-right">
                         {% if delete_form_file_name is defined %}
                             {{ include(delete_form_file_name) }}
@@ -21,7 +20,7 @@
                         <button class="btn btn-primary" type="submit" form="{{ form_id }}">{{ button_label }}</button>
                         {% endif %}
                         {% if edit_path is defined %}
-                            <a class="btn btn-primary" href="{{ edit_path }}">Edit</a>
+                            <a class="btn btn-primary" href="{{ edit_path }}">{{ 'Edit' | trans }}Edit</a>
                         {% endif %}
                     </div>
                 </div>

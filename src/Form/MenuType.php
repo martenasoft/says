@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use App\Entity\Menu;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -12,6 +13,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MenuType extends AbstractType
 {
+    public function __construct(
+        private ParameterBagInterface $parameter
+    )
+    {
+
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -19,6 +27,10 @@ class MenuType extends AbstractType
 
             ->add('slug', TextType::class, [
                     'required' => false
+            ])
+            ->add('lang', ChoiceType::class, [
+                'label' => 'Lang',
+                'choices' => array_flip($this->parameter->get('languages'))
             ])
             ->add('path', TextType::class, [
                 'required' => false,

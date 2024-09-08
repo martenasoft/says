@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Permission{% endblock %}
+{% block title %}{{ 'Permission' | trans }}{% endblock %}
 
 {% block body %}
     <h1>Permission</h1>
@@ -8,11 +8,11 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
+                <th>{{ 'Id' | trans }}</th>
                 <td>{{ permission.id }}</td>
             </tr>
             <tr>
-                <th>Name</th>
+                <th>{{ 'Name' | trans }}</th>
                 <td>{{ permission.name }}</td>
             </tr>
         </tbody>

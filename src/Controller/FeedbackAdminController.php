@@ -12,10 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/feedback')]
+#[Route('/{_locale}/admin/feedback')]
 class FeedbackAdminController extends AbstractController
 {
-    #[Route('/admin', name: 'app_feedback_admin_index', methods: ['GET'])]
+    #[Route('/', name: 'app_feedback_admin_index', methods: ['GET'])]
     public function index(
         PaginatorInterface $paginator,
         Request            $request,
@@ -32,7 +32,7 @@ class FeedbackAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/new', name: 'app_feedback_admin_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_feedback_admin_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $feedback = new Feedback();
@@ -52,7 +52,7 @@ class FeedbackAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/{id}', name: 'app_feedback_admin_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_feedback_admin_show', methods: ['GET'])]
     public function show(Feedback $feedback, EntityManagerInterface $entityManager): Response
     {
         $feedback->setStatus(Feedback::STATUS_VIEWED);
@@ -63,7 +63,7 @@ class FeedbackAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/edit/{id}', name: 'app_feedback_admin_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'app_feedback_admin_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Feedback $feedback, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(FeedbackType::class, $feedback);
@@ -85,7 +85,7 @@ class FeedbackAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/delete/{id}', name: 'app_feedback_admin_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_feedback_admin_delete', methods: ['POST'])]
     public function delete(Request $request, Feedback $feedback, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$feedback->getId(), $request->getPayload()->get('_token'))) {

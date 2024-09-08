@@ -12,17 +12,19 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Translation\LocaleSwitcher;
 
-#[Route('/')]
+
 class PageController extends AbstractController
 {
     use PageTrait;
 
-    #[Route('/', name: 'app_page_main', methods: ['GET'])]
+    #[Route('/{_locale}', name: 'app_page_main', methods: ['GET'],  defaults: ['_locale' => 'en'])]
     public function main(
         PageRepository     $pageRepository,
         PaginatorInterface $paginator,
-        Request            $request
+        Request            $request,
+        LocaleSwitcher $localeSwitcher
     ): Response
     {
         $limit = $this->getParameter('preview_on_main_limit') ?? 10;
@@ -50,11 +52,11 @@ class PageController extends AbstractController
         return $this->render('page/main.html.twig', [
             'items' => $items,
             'page' => $page,
-            'pagination' => $this->getPagination($pageRepository, $paginator, $request)
+            'pagination' => $this->getPagination($localeSwitcher, $pageRepository, $paginator, $request)
         ]);
     }
 
-    #[Route('/page/{slug}.html', name: 'app_page_show', methods: ['GET'], requirements: ['slug' => '[a-zA-Z0-9-\_\/]+'])]
+    #[Route('/{_locale}/page/{slug}.html', name: 'app_page_show', methods: ['GET'], requirements: ['slug' => '[a-zA-Z0-9-\_\/]+'],  defaults: ['_locale' => 'en'])]
     public function show(string $slug, PageRepository $pageRepository): Response
     {
         $slug = $this->getSlugFromPath($slug);
@@ -67,13 +69,14 @@ class PageController extends AbstractController
         ]);
     }
 
-    #[Route('/page/{slug}', defaults: ['slug' => null], name: 'app_page_section', methods: ['GET'], requirements: ['slug' => '[a-zA-Z0-9-\_\/]+'])]
+    #[Route('/{_locale}/page/{slug}', defaults: ['slug' => null, '_locale' => 'en'], name: 'app_page_section', methods: ['GET'], requirements: ['slug' => '[a-zA-Z0-9-\_\/]+'])]
     public function section(
         ?string                $slug,
         PageRepository         $pageRepository,
         MenuRepository         $menuRepository,
         PaginatorInterface     $paginator,
         Request                $request,
+        LocaleSwitcher $localeSwitcher
     ): Response
     {
         $slug = $this->getSlugFromPath($slug);
@@ -89,7 +92,7 @@ class PageController extends AbstractController
             throw new NotFoundHttpException("Page [$slug] not found");
         }
 
-        $queryBuilder = $this->getItemsQueryBuilder($pageRepository);
+        $queryBuilder = $this->getItemsQueryBuilder($pageRepository, $localeSwitcher);
         if ($page->getMenu()) {
             $queryBuilder
                 ->innerJoin("p.menu", "m")
@@ -102,7 +105,7 @@ class PageController extends AbstractController
         }
          return $this->render('page/section.html.twig', [
             'page' => $page,
-            'pagination' => $this->getPagination($pageRepository, $paginator, $request, page: $page, queryBuilder: $queryBuilder),
+            'pagination' => $this->getPagination($localeSwitcher, $pageRepository, $paginator, $request, page: $page, queryBuilder: $queryBuilder),
         ]);
     }
 

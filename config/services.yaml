@@ -8,7 +8,10 @@ parameters:
     image_public: '/image'
     preview_on_main_limit: 10
     date_time_format: 'd/m/y H:i'
-
+    languages: ['en', 'ua', 'fr']
+twig:
+    globals:
+        languages: "%languages%"
 
 services:
     # default configuration for services in *this* file

@@ -1,21 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Feedback index{% endblock %}
+{% block title %} {{ 'Feedback' | trans }} {{ 'Index' }}{% endblock %}
+{% block h1 %} {{ 'Feedback' | trans }} {{ 'Index' }}{% endblock %}
 
 {% block body %}
-    <h1>Feedback index</h1>
     <div class="count">
         {{ pagination.getTotalItemCount }}
     </div>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>From</th>
-                <th>Subject</th>
-                <th>Created</th>
-                <th>Updated</th>
-                <th>Status</th>
+                <th>{{ 'Id' | trans }}</th>
+                <th>{{ 'From' | trans }}</th>
+                <th>{{ 'Subject' | trans }}</th>
+                <th>{{ 'CreatedAt' | trans }}</th>
+                <th>{{ 'UpdatedAt' | trans }}</th>
+                <th>{{ 'Status' | trans }}</th>
                 <th></th>
             </tr>
         </thead>
@@ -27,10 +27,10 @@
                 <td>{{ feedback.subject }}</td>
                 <td>{{ feedback.createdAt ? feedback.createdAt|date(date_time_format) : '' }}</td>
                 <td>{{ feedback.updatedAt ? feedback.updatedAt|date(date_time_format) : '' }}</td>
-                <td>{{ constant('App\\Entity\\Feedback::STATUSES')[feedback.status] ?? '' }}</td>
+                <td>{{ (constant('App\\Entity\\Feedback::STATUSES')[feedback.status] ?? '') | trans }}</td>
                 <td>
-                    <a href="{{ path('app_feedback_admin_show', {'id': feedback.id}) }}">show</a>
-                    <a href="{{ path('app_feedback_admin_edit', {'id': feedback.id}) }}">edit</a>
+                    <a href="{{ path('app_feedback_admin_show', {'id': feedback.id}) }}">{{ 'Show' | trans }}</a>
+                    <a href="{{ path('app_feedback_admin_edit', {'id': feedback.id}) }}">{{ 'Edit' | trans }}</a>
                 </td>
             </tr>
         {% else %}
@@ -41,7 +41,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_feedback_admin_new') }}">Create new</a>
+    <a href="{{ path('app_feedback_admin_new') }}">{{ 'Create new' | trans }}</a>
 
     <div class="navigation">
         {{ knp_pagination_render(pagination) }}

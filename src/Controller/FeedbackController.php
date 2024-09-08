@@ -10,18 +10,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Translation\LocaleSwitcher;
 
-#[Route('/feedback')]
+#[Route('/{_locale}/feedback')]
 class FeedbackController extends AbstractController
 {
     #[Route('/', name: 'app_feedback_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, PageRepository $pageRepository): Response
-    {
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        PageRepository $pageRepository,
+        LocaleSwitcher $localeSwitcher
+    ): Response {
         $page = $pageRepository
             ->getOneBySlugQueryBuilder('app_feedback_new', true)
             ->getQuery()
             ->getOneOrNullResult();
         $feedback = new Feedback();
+        $feedback->setLang($localeSwitcher->getLocale());
         $user = $this->getUser();
         if (!empty($user) ) {
             $feedback->setFromEmail($user->getUserIdentifier());

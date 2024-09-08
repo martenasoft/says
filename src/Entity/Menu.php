@@ -71,6 +71,9 @@ class Menu implements
 
     private ?Menu $parent = null;
 
+    #[ORM\Column(length: 6)]
+    private ?string $lang = null;
+
     public function getPath(): ?string
     {
         return $this->path;
@@ -125,6 +128,18 @@ class Menu implements
     public function setParent(?Menu $parent): Menu
     {
         $this->parent = $parent;
+        return $this;
+    }
+
+    public function getLang(): ?string
+    {
+        return $this->lang;
+    }
+
+    public function setLang(string $lang): static
+    {
+        $this->lang = $lang;
+
         return $this;
     }
 }

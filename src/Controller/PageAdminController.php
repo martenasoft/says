@@ -21,26 +21,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Translation\LocaleSwitcher;
 use Symfony\Contracts\Translation\TranslatableInterface;
 
+#[Route('/{_locale}/admin/page')]
 class PageAdminController extends AbstractController
 {
     use PageTrait;
-
-    #[Route('/admin/page', name: 'app_page_index', methods: ['GET'])]
+    #[Route('/', name: 'app_page_index', methods: ['GET'])]
     public function index(
         PageRepository     $pageRepository,
         PaginatorInterface $paginator,
-        Request            $request
+        Request            $request,
+        LocaleSwitcher $localeSwitcher
     ): Response
     {
 
         return $this->render('page_admin/index.html.twig', [
-            'pagination' => $this->getPagination($pageRepository, $paginator, $request),
+            'pagination' => $this->getPagination($localeSwitcher, $pageRepository, $paginator, $request),
         ]);
     }
 
-    #[Route('/admin/page/new', name: 'app_page_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_page_new', methods: ['GET', 'POST'])]
     public function new(
         Request                $request,
         EntityManagerInterface $entityManager,
@@ -100,7 +102,7 @@ class PageAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/page/edit/{id}', name: 'app_page_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'app_page_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request                $request,
         int                    $id,
@@ -188,7 +190,7 @@ class PageAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/page/delete/{id}', name: 'app_page_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_page_delete', methods: ['POST'])]
     public function delete(
         Request                $request,
         Page                   $page,

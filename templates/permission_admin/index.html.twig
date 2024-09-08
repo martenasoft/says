@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Permission index{% endblock %}
-{% block h1 %}Permission index{% endblock %}
+{% block title %}{{ 'Permission' | trans}} {{ 'index' | trans }}{% endblock %}
+{% block h1 %}{{ 'Permission' | trans}} {{ 'index' | trans }}{% endblock %}
 
 {% block body %}
     <div class="count">
@@ -10,9 +10,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>actions</th>
+                <th>{{ 'Id' | trans }}</th>
+                <th>{{ 'Name' | trans }}</th>
+                <th>{{ 'actions' | trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -21,19 +21,21 @@
                 <td>{{ permission.id }}</td>
                 <td>{{ permission.name }}</td>
                 <td>
-                    <a href="{{ path('app_permission_admin_show', {'id': permission.id}) }}">show</a>
-                    <a href="{{ path('app_permission_admin_edit', {'id': permission.id}) }}">edit</a>
+                    <a href="{{ path('app_permission_admin_show', {'id': permission.id}) }}">{{ 'Show' | trans }}</a>
+                    <a href="{{ path('app_permission_admin_edit', {'id': permission.id}) }}">{{ 'Edit' | trans }}</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">
+                    {{ include('elements/no_records_founds.html.twig') }}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_permission_admin_new') }}">Create new</a>
+    <a href="{{ path('app_permission_admin_new') }}">{{ 'Create new' | trans }}</a>
     <div class="navigation">
         {{ knp_pagination_render(pagination) }}
     </div>

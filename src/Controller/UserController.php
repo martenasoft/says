@@ -13,9 +13,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
+#[Route('/{_locale}/profile')]
 class UserController extends AbstractController
 {
-    #[Route('/profile/{id}', name: 'app_user_profile', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_user_profile', methods: ['GET'])]
     public function show(User $user): Response
     {
         return $this->render('user/profile.html.twig', [
@@ -23,7 +24,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/change-password/{id}', name: 'app_user_profile_change_password', methods: ['GET', 'POST'])]
+    #[Route('/change-password/{id}', name: 'app_user_profile_change_password', methods: ['GET', 'POST'])]
     public function changePassword(
         Request                     $request,
         User                        $user,
@@ -55,7 +56,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/delete/{id}', name: 'app_user_profile_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_user_profile_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         $isAdmin = in_array(User::ADMIN_ROLE, $this->getUser()->getRoles());

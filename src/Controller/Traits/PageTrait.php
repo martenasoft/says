@@ -10,10 +10,12 @@ use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Monolog\DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\LocaleSwitcher;
 
 trait PageTrait
 {
     private function getPagination(
+        LocaleSwitcher $localeSwitcher,
         PageRepository     $pageRepository,
         PaginatorInterface $paginator,
         Request            $request,
@@ -22,7 +24,7 @@ trait PageTrait
         ?QueryBuilder $queryBuilder = null
     ): PaginationInterface
     {
-        $queryBuilder = $queryBuilder ?? $this->getItemsQueryBuilder($pageRepository);
+        $queryBuilder = $queryBuilder ?? $this->getItemsQueryBuilder($pageRepository, $localeSwitcher);
 
         return $paginator->paginate(
             $queryBuilder->getQuery(),
@@ -30,10 +32,13 @@ trait PageTrait
         );
     }
 
-    private function getItemsQueryBuilder(PageRepository $pageRepository): QueryBuilder
+    private function getItemsQueryBuilder(PageRepository $pageRepository, LocaleSwitcher $localeSwitcher): QueryBuilder
     {
+        $currentLocale = $localeSwitcher->getLocale();
         $result = $pageRepository
             ->getAllQueryBuilder()
+            ->andWhere('p.lang=:lang')
+            ->setParameter('lang', $currentLocale)
             ->addOrderBy('p.position', "ASC")
             ->addOrderBy("p.publicAt", "DESC")
             ;

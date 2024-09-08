@@ -1,0 +1,108 @@
+Page index: "Сторінки. Головна"
+Total: "Всього"
+Create new: "Створити нову"
+Id: "#"
+Name: "Ім'я"
+Status: "Статус"
+Page: "Сторінка"
+
+Show: "Показати"
+Edit: "Редагувати"
+New: "Нове"
+CreatedAt: "Створено"
+Home: "Головна"
+index: "індекс"
+actions: "дії"
+
+
+Back to list: "Назад до списку"
+No records found: "Записів не знайдено"
+Save: "Зберегти"
+Delete: "Видалити"
+
+Are you sure you want to delete this item?: "Ви впевнені, що хочете видалити цей елемент?"
+Feedback: "Відгук"
+Index: "Індекс"
+From: "Від"
+Subject: "Тема"
+
+Logout: "Вийти"
+Login: "Увійти"
+Registration: "Реєстрація"
+Profile: "Профіль"
+
+Admin Menu: "Меню адміністратора"
+
+Menu: "Mеню"
+Menu items: "Пункти меню"
+Menu Admin: "Адміністрування меню"
+Edit menu: "Редагувати меню"
+New menu: "Нове меню"
+New sub Menu: "Нове підменю"
+
+Permission: "Дозвіл"
+Create permission: "Створити дозвіл"
+
+Hi! Please confirm your email!: "Привіт! Будь ласка, підтвердіть свою електронну пошту!"
+Please confirm your email address by clicking the following link: "Будь ласка, підтвердіть свою електронну адресу, натиснувши на наступне посилання"
+Confirm my Email: "Підтвердити мою електронну адресу"
+This link will expire in: "Це посилання сплине через"
+Cheers!: "З найкращими побажаннями!"
+
+Register: "Зареєструватися"
+Password: "Пароль"
+
+Password Reset Email Sent: "Електронний лист для скидання пароля надіслано"
+If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.: "Якщо обліковий запис з вашою електронною поштою існує, було надіслано лист із посиланням для скидання пароля."
+If you don't receive an email please check your spam folder or: "Якщо ви не отримали листа, будь ласка, перевірте папку зі спамом або"
+try again: "спробуйте знову"
+Hi!: "Привіт!"
+To reset your password, please visit the following link: "Щоб скинути пароль, перейдіть за наступним посиланням"
+
+Reset your password: "Скинути пароль"
+Enter your email address, and we will send you a link to reset your password: "Введіть свою електронну адресу, і ми надішлемо вам посилання для скидання пароля"
+Send password reset email: "Надіслати електронного листа для скидання пароля"
+Reset password: "Скинути пароль"
+
+Role: "Роль"
+
+Log in!: "Увійдіть!"
+Please sign in: "Будь ласка, увійдіть"
+Remember me: "Запам'ятати мене"
+Sign in: "Увійти"
+
+User: "Користувач"
+Roles: "Ролі"
+Is Verified: "Підтверджено"
+
+
+Main: "Головна"
+Text: "Текст"
+Image: "Зображення"
+Seo: "Seo"
+Social networks: "Соціальні мережі"
+Public: "Публікація"
+
+Please enter a password: "Будь ласка, введіть пароль"
+New password: "Новий пароль"
+Repeat Password: "Повторіть пароль"
+The password fields must match: "Поля паролів повинні збігатися"
+Default: 'Основне'
+Security: 'Безпека'
+
+Lang: "Мова"
+Type: "Тип"
+Path: "Шлях"
+Preview: "Попередній перегляд"
+Body: "Тіло"
+Is top menu: "Верхнє меню"
+Is left menu: "Ліве меню"
+Is bottom menu: "Нижнє меню"
+Please upload a valid image: "Будь ласка, завантажте дійсне зображення"
+Blocked: "Заблоковано"
+Active: "Активний"
+Deleted: "Видалено"
+Permissions: "Дозволи"
+UpdatedAt: "Оновлено"
+Viewed: "Переглянуто"
+

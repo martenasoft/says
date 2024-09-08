@@ -6,11 +6,10 @@
 {% block body %}
 
     {{ include('page_admin/_form.html.twig') }}
-
     {{ include('elements/form_bottom_buttons.html.twig',{
         'back_to_list_path':  path('app_page_index'),
         'form_id': 'page-form',
-        'button_label': 'Create'
+        'button_label': ('Save' | trans)
     }
     ) }}
 {% endblock %}

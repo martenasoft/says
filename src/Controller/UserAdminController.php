@@ -14,10 +14,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-
+#[Route('/{_locale}/admin/user')]
 class UserAdminController extends AbstractController
 {
-    #[Route('/admin/user', name: 'app_user_admin_index', methods: ['GET'])]
+    #[Route('/', name: 'app_user_admin_index', methods: ['GET'])]
     public function index(
         PaginatorInterface $paginator,
         Request            $request,
@@ -34,7 +34,7 @@ class UserAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/user/new', name: 'app_user_admin_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_user_admin_new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
@@ -62,7 +62,7 @@ class UserAdminController extends AbstractController
     }
 
 
-    #[Route('/admin/user/edit/{id}', name: 'app_user_admin_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'app_user_admin_edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         User $user,

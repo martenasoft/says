@@ -1,17 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Feedback{% endblock %}
+{% block title %} {{ 'Edit' | trans }} {{ 'Feedback' | trans }}{% endblock %}
+{% block h1 %} {{ 'Edit' | trans }} {{ 'Feedback' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Feedback</h1>
-
     {{ include('feedback_admin/_form.html.twig') }}
 
     {{ include('elements/form_bottom_buttons.html.twig',{
         'back_to_list_path':  path('app_feedback_admin_index'),
         'delete_form_file_name' : 'feedback_admin/_delete_form.html.twig',
         'form_id': 'feedback-form',
-        'button_label' : 'Update'
+        'button_label' :  ('Save' | trans)
     }
     ) }}
 

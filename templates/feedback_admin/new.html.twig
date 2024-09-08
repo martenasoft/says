@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Feedback{% endblock %}
+{% block title %}{{ 'New' | trans }} {{ 'Feedback' | trans }} {% endblock %}
+{% block h1 %}{{ 'New' | trans }} {{ 'Feedback' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Feedback</h1>
 
     {{ include('feedback/_form.html.twig') }}
 
     {{ include('elements/form_bottom_buttons.html.twig',{
         'back_to_list_path':  path('app_feedback_admin_index'),
         'form_id': 'feedback-form',
-        'button_label': 'Create'
+        'button_label': ('Save' | trans)
     }
     ) }}
 {% endblock %}

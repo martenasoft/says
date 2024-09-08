@@ -125,6 +125,9 @@ class Page implements
     #[ORM\Column]
     private ?bool $isPreviewOnMain = false;
 
+    #[ORM\Column(length: 6, nullable: true)]
+    private ?string $lang = null;
+
     public function getPreview(): ?string
     {
         return $this->preview;
@@ -206,6 +209,18 @@ class Page implements
     public function setIsPreviewOnMain(bool $isPreviewOnMain): static
     {
         $this->isPreviewOnMain = $isPreviewOnMain;
+
+        return $this;
+    }
+
+    public function getLang(): ?string
+    {
+        return $this->lang;
+    }
+
+    public function setLang(?string $lang): static
+    {
+        $this->lang = $lang;
 
         return $this;
     }

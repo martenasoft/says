@@ -17,23 +17,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Translation\LocaleSwitcher;
 
+#[Route('/{_locale}/admin/menu')]
 class MenuAdminController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private LoggerInterface        $logger
+        private LoggerInterface        $logger,
+        private LocaleSwitcher $localeSwitcher
     )
     {
     }
 
-    #[Route('/admin/menu', name: 'menu_admin_index')]
+    #[Route('/', name: 'menu_admin_index')]
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
         return $this->render('menu_admin/index.html.twig');
     }
 
-    #[Route('/admin/menu/new', name: 'menu_admin_new_menu')]
+    #[Route('/new', name: 'menu_admin_new_menu')]
     public function newRoot(
         Request         $request,
         MenuRepository  $menuRepository,
@@ -73,7 +76,7 @@ class MenuAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/menu/new-sub-menu/{id}', name: 'menu_admin_new_sub_menu')]
+    #[Route('/new-sub-menu/{id}', name: 'menu_admin_new_sub_menu')]
     public function newSubMenu(
         Request                $request,
         Menu                   $parent,
@@ -119,7 +122,7 @@ class MenuAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/menu/edit/{id}', name: 'menu_admin_edit')]
+    #[Route('/edit/{id}', name: 'menu_admin_edit')]
     public function edit(
         Request                $request,
         Menu                   $menu,
@@ -170,7 +173,11 @@ class MenuAdminController extends AbstractController
     ): Response
     {
         $pagination = $paginator->paginate(
-            $menuRepository->getAllQueryBuilder()->getQuery(),
+            $menuRepository
+                ->getAllQueryBuilder()
+                ->andWhere('m.lang=:lang')
+                ->setParameter('lang', $this->localeSwitcher->getLocale())
+                ->getQuery(),
             $request->query->getInt('page', 1)
         );
 
@@ -180,7 +187,7 @@ class MenuAdminController extends AbstractController
         );
     }
 
-    #[Route('/admin/menu/up/{id}', name: 'menu_admin_up')]
+    #[Route('/up/{id}', name: 'menu_admin_up')]
     public function up(
         Menu                   $menu,
         MenuRepository         $menuRepository,
@@ -213,7 +220,7 @@ class MenuAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/menu/down/{id}', name: 'menu_admin_down')]
+    #[Route('/down/{id}', name: 'menu_admin_down')]
     public function down(
         Menu                   $menu,
         MenuRepository         $menuRepository,
@@ -243,7 +250,7 @@ class MenuAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/menu/delete/{id}', name: 'menu_admin_delete')]
+    #[Route('/delete/{id}', name: 'menu_admin_delete')]
     public function delete(
         Menu                   $menu,
         MenuRepository         $menuRepository,

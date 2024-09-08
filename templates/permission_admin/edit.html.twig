@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Permission{% endblock %}
-{% block h1 %}Edit Permission{% endblock %}
+{% block title %}{{ 'Edit' | trans }} {{ 'Permission' | trans }}{% endblock %}
+{% block h1 %}{{ 'Edit' | trans }} {{ 'Permission' | trans }}{% endblock %}
 
 {% block body %}
     {{ include('permission_admin/_form.html.twig') }}
     {{ include('elements/form_bottom_buttons.html.twig',{
         'back_to_list_path':  path('app_permission_admin_index'),
         'delete_form_file_name' : 'permission_admin/_delete_form.html.twig',
-        'button_label' : 'Update',
+        'button_label' : ('Save' | trans),
         'form_id': 'permission-form',
     }
     ) }}

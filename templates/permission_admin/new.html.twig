@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Permission{% endblock %}
+{% block title %}{{ 'New' | trans }} {{ 'Permission' | trans }}{% endblock %}
+{% block h1 %}{{ 'New' | trans }} {{ 'Permission' | trans }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Permission</h1>
 
     {{ include('permission_admin/_form.html.twig') }}
 
     {{ include('elements/form_bottom_buttons.html.twig',{
         'back_to_list_path':  path('app_permission_admin_index'),
         'form_id': 'permission-form',
-        'button_label': 'Create'
+        'button_label': ('Save' | trans)
     }
     ) }}
 {% endblock %}
