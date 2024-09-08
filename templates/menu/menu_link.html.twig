@@ -2,6 +2,8 @@
 {% set target = '' %}
 {% if item.menu.type is defined and item.menu.type == constant('App\\Entity\\Menu::EXTERNAL_PAGE_TYPE') %}
     {% set url = item.menu.slug %}
+{% elseif item.menu.type is defined and item.menu.type == constant('App\\Entity\\Menu::SITE_ELEMENT_TYPE') %}
+    {% set url = '/' ~ app.request.locale ~ '/'~(item.menu.name|lower) %}
 {% elseif item.menu.slug is defined and item.menu.slug is not empty
     and item.menu.type == constant('App\\Entity\\Menu::ITEM_MENU_TYPE')
     and item.type == constant('App\\Entity\\Page::CONTROLLER_ROUTE_TYPE')

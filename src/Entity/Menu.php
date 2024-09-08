@@ -51,10 +51,12 @@ class Menu implements
 
     public const ITEM_MENU_TYPE = 1;
     public const EXTERNAL_PAGE_TYPE = 2;
+    public const SITE_ELEMENT_TYPE = 3;
 
     public const TYPES = [
         self::ITEM_MENU_TYPE => 'Item menu',
-        self::EXTERNAL_PAGE_TYPE => 'External page'
+        self::EXTERNAL_PAGE_TYPE => 'External page',
+        self::SITE_ELEMENT_TYPE => 'Site element',
     ];
 
     #[ORM\Column(length: 255, nullable: true)]

@@ -1,12 +1,25 @@
 <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
         {% if items is not empty %}
+            {% set path = '' %}
+            {% set slug = '' %}
+            <li class="breadcrumb-item"><a
+                        href="{{ path('app_page_main', { _locale: app.request.locale}) }}">{{ 'Home' | trans }}</a></li>
             {% for item in items %}
-                {% if loop.last or item.path is empty %}
+                {% if loop.last or item.slug is empty %}
                     <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
-                {% else %}
+                {% elseif loop.first and item.type == constant('App\\Entity\\Menu::SITE_ELEMENT_TYPE') %}
+
+                    {% set path = item.slug %}
+                    {% set slug = '/'~(item.name|lower) %}
+
                     <li class="breadcrumb-item"><a
-                                href="/page{{ item.path }}">{{ item.name }}</a></li>
+                                href="{{ path(path, { _locale: app.request.locale}) }}">{{ item.name }}</a></li>
+                {% elseif path is not empty %}
+                    {% set slug = slug ~ '/'~ item.slug %}
+
+                    <li class="breadcrumb-item"><a
+                                href="{{ path(path, {slug: slug, _locale: app.request.locale}) }}">{{ item.name }}</a></li>
                 {% endif %}
 
             {% endfor %}

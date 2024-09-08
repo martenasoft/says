@@ -76,6 +76,7 @@ class MenuController extends AbstractController
 
         $queryBuilder = $menuRepository->getParentsByItemQueryBuilder($node);
         $queryBuilder->andWhere('m.lang=:lang')->setParameter('lang', $this->localeSwitcher->getLocale());
+
         return $this->render('menu/breadcrumbs.html.twig', ['items' => $queryBuilder->getQuery()->getArrayResult()]);
     }
 }
