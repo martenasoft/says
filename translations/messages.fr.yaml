@@ -1,6 +1,6 @@
 Page index: "Articles. Accueil"
 Total: "Total"
-Create new: "Créer nouveau"
+Create new: "Créer"
 Id: "Id"
 Name: "Nom"
 Status: "Statut"
@@ -104,4 +104,8 @@ Deleted: "Supprimé"
 Permissions: "Autorisations"
 UpdatedAt: "Mis à jour le"
 Viewed: "Consulté"
+
+Yes: "Oui"
+No: "Non"
+Empty password!: "Mot de passe vide !"
 

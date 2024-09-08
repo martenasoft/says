@@ -25,9 +25,9 @@
                 <td>{{ user.id }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td class="text-center">{{ constant('App\\Entity\\User::STATUSES')[user.status] ?? '' }}
-                    {{ user.password is empty ? 'Empty password!' }}</td>
-                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
+                <td class="text-center">{{ (constant('App\\Entity\\User::STATUSES')[user.status] ?? '') | trans }}
+                    {{ (user.password is empty ? 'Empty password!') | trans }}</td>
+                <td>{{ (user.isVerified ? 'Yes' : 'No') | trans }}</td>
                 <td>
                     <a href="{{ path('app_user_profile', {'id': user.id}) }}">{{ 'Show' | trans }}</a>
                     <a href="{{ path('app_user_admin_edit', {'id': user.id}) }}">{{ 'Edit' | trans }}</a>

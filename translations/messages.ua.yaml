@@ -1,6 +1,6 @@
 Page index: "Сторінки. Головна"
 Total: "Всього"
-Create new: "Створити нову"
+Create new: "Створити"
 Id: "#"
 Name: "Ім'я"
 Status: "Статус"
@@ -105,4 +105,9 @@ Deleted: "Видалено"
 Permissions: "Дозволи"
 UpdatedAt: "Оновлено"
 Viewed: "Переглянуто"
+
+Yes: "Так"
+No: "Ні"
+Empty password!: "Порожній пароль!"
+
 
