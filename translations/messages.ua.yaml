@@ -11,7 +11,7 @@ Edit: "Редагувати"
 New: "Нове"
 CreatedAt: "Створено"
 Home: "Головна"
-index: "індекс"
+index: ""
 actions: "дії"
 
 
@@ -22,7 +22,7 @@ Delete: "Видалити"
 
 Are you sure you want to delete this item?: "Ви впевнені, що хочете видалити цей елемент?"
 Feedback: "Відгук"
-Index: "Індекс"
+Index: ""
 From: "Від"
 Subject: "Тема"
 
