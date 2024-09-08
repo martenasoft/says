@@ -30,9 +30,9 @@ class PageController extends AbstractController
         $limit = $this->getParameter('preview_on_main_limit') ?? 10;
         $items = $pageRepository
             ->getAllQueryBuilder()
-
-
+            ->andWhere("p.lang=:lang")
             ->andWhere("(p.isPreviewOnMain=:isPreviewOnMain OR (p.type != :controllerRouteType AND p.slug=:main))")
+            ->setParameter("lang", $localeSwitcher->getLocale())
             ->setParameter('controllerRouteType', Page::CONTROLLER_ROUTE_TYPE)
             ->setParameter('isPreviewOnMain', true)
             ->setParameter('main',  Page::MAIN_URL)
@@ -57,10 +57,16 @@ class PageController extends AbstractController
     }
 
     #[Route('/{_locale}/page/{slug}.html', name: 'app_page_show', methods: ['GET'], requirements: ['slug' => '[a-zA-Z0-9-\_\/]+'],  defaults: ['_locale' => 'en'])]
-    public function show(string $slug, PageRepository $pageRepository): Response
+    public function show(string $slug, PageRepository $pageRepository, LocaleSwitcher $localeSwitcher): Response
     {
         $slug = $this->getSlugFromPath($slug);
-        $result = $pageRepository->getOneBySlugQueryBuilder($slug)->getQuery()->getOneOrNullResult();
+        $result = $pageRepository
+            ->getOneBySlugQueryBuilder($slug)
+            ->andWhere("p.lang=:lang")
+            ->setParameter("lang", $localeSwitcher->getLocale())
+            ->getQuery()
+            ->getOneOrNullResult();
+
         if (!$result) {
             throw new NotFoundHttpException('Page not found');
         }
